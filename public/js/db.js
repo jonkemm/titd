@@ -271,4 +271,4 @@ const IDB = (function init() {
     document.whiskeyForm.reset();
     document.whiskeyForm.removeAttribute('data-key');
   }
-})();
+})(); 

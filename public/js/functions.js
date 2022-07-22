@@ -1,5 +1,4 @@
-import { adjustHeaderText, buildUi, printTodos, readShare, printShare } from './ui.js';
-import { func } from './uuid.js';
+import { monitor, waitFor, adjustHeaderText, buildUi, printTodos, readShare, printShare } from './ui.js';
 
 // // fn to send js to the server
 // function sending (requestURL) {

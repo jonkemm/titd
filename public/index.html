@@ -4,8 +4,7 @@
   <meta name="description" content="This is an example of a to do application made in Node. It's pretty cool.">
   <title>This is the day</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-  <link rel="stylesheet" href="./css/vanilla-calendar.css" />
+  <!-- <link rel="stylesheet" href="./css/vanilla-calendar.css" /> -->
   <link rel="stylesheet" href="./css/jk.css">
   <link rel="icon" type="image/png" href="./favicon.ico">
   <script defer src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous" charset="utf-8"></script>
@@ -15,20 +14,18 @@
   <script>var exports = {};</script>
   <!-- <script defer src="./js/vanilla-calendar.js"></script> -->
   <script defer src="js/functions.js" type="module" defer ></script>
+  <!-- <script defer src="js/db.js" type="module" defer ></script> -->
 </head>
 <body class="titd-dark">
   <div class="container">
       <div id="screen-top">
-              <nav class="navbar navbar-expand-lg" id="nav">
-                <a class="navbar-brand" href="#">
+              <nav id="nav">
+                <a href="#">
                     <h1>This is the day</h1>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"  style="font-size: 10pt; border: #fff !important;"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item header-range">
+                <div>
+                    <ul>
+                        <!-- <li class="header-range">
                             <form id="rating-form" action="/add_rating" method="get">
                                 <fieldset>
                                     <legend>Add rating</legend>
@@ -49,13 +46,14 @@
                                     </div>
                                 </fieldset>
                             </form>
-                        <li class="nav-item"><a class="nav-link" data-value="titd" title="Read your intentions / reflections">titd</a></li>
-                        <li class="nav-item"><a class="nav-link" data-value="find" title="Find ideas / days">Reflect</a></li>
-                        <li class="nav-item"><a class="nav-link" data-value="todos" title="Links to lovely things to try">To do</a></li>
-                        <li class="nav-item"><a class="nav-link" data-value="notes" title="Keep a diary">Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" data-value="dark" title="Keep a diary"><i class="fa fa-moon-o" id="dark" data-value="dark" aria-hidden="true"></i></a></li>
-                        <li class="nav-item"><a class="nav-link" data-value="share" title="Share"><i class="fa fa-whatsapp" data-value="share" aria-hidden="true"></i><input id="share-item-text" type="hidden" /></a></li>
-                        <li class="nav-item"><a class="nav-link" title="Log out"><i class="fa fa-sign-out logout" aria-hidden="true"></i></a></li>
+                        </li> -->
+                        <li><a data-value="titd" title="Read your intentions / reflections">titd</a></li>
+                        <li><a data-value="find" title="Find ideas / days">Reflect</a></li>
+                        <li><a data-value="todos" title="Links to lovely things to try">To do</a></li>
+                        <li><a data-value="notes" title="Keep a diary">Notes</a></li>
+                        <li class="icons"><a data-value="dark" title="Dark mode"><i class="fa fa-moon-o" id="dark" data-value="dark" aria-hidden="true"></i></a>
+                        <a data-value="share" title="Share"><i class="fa fa-whatsapp" data-value="share" aria-hidden="true"></i><input id="share-item-text" type="hidden" /></a>
+                        <a title="Log out"><i class="fa fa-sign-out logout" aria-hidden="true"></i></a></li>
                      </ul>
                 </div>
 
@@ -75,41 +73,7 @@
                                     <div id="emojis-container"></div>
                                 </div>
                             </fieldset>
-
-
-
-        <fieldset>
-            <p>
-              <label for="name">Whiskey: </label>
-              <input type="text" id="name" placeholder="Whiskey Name" required />
-            </p>
-            <p>
-              <label for="country">Country of Origin: </label>
-              <input type="text" id="country" value="" required />
-            </p>
-            <p>
-              <label for="age">Years Old: </label>
-              <input
-                type="text"
-                inputmode="numeric"
-                pattern="[\d]+"
-                id="age"
-                required
-              />
-            </p>
-            <p>
-              <label for="isOwned">Owned: </label>
-              <input type="checkbox" id="isOwned" value="yes" />
-            </p> 
-            <p>
-              <button id="btnAdd">Add Whiskey</button>
-              <button id="btnUpdate">Update Whiskey</button>
-              <button id="btnDelete">Delete Whiskey</button>
-              <button id="btnClear">Reset Form</button>
-            </p>
-          </fieldset>
                         </form>
-
                       </div>
               </header>
       </div>
@@ -118,10 +82,59 @@
                       <div class="switch-container"> am <div class="switch"> <input type="checkbox" id="switchButton" /><label for="switchButton">Toggle</label> </div> pm </div>
                       <div class="vanilla-calendar" id="vanilla-calendar-01"></div>
               </div> -->
-              <div id="items"></div>
+              <table class="table-responsive">
+                <tbody id="items"></tbody>
+              </table>
       </main>
-      <footer>
-      </footer>
+      
+
+
+
+      <form name="whiskeyForm">
+        <fieldset>
+          <p>
+            <label for="name">Whiskey: </label>
+            <input type="text" id="name" placeholder="Whiskey Name" required />
+          </p>
+          <p>
+            <label for="country">Country of Origin: </label>
+            <input type="text" id="country" value="" required />
+          </p>
+          <p>
+            <label for="age">Years Old: </label>
+            <input
+              type="text"
+              inputmode="numeric"
+              pattern="[\d]+"
+              id="age"
+              required
+            />
+          </p>
+          <p>
+            <label for="isOwned">Owned: </label>
+            <input type="checkbox" id="isOwned" value="yes" />
+          </p>
+          <p>
+            <button id="btnAdd">Add Whiskey</button>
+            <button id="btnUpdate">Update Whiskey</button>
+            <button id="btnDelete">Delete Whiskey</button>
+            <button id="btnClear">Reset Form</button>
+          </p>
+        </fieldset>
+      </form>
+
+      <section>
+        <h3 class="listTitle">List of Whiskeys</h3>
+        <ul class="wList">
+          <!-- build list here -->
+        </ul>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2021 Chicken Stuff Inc.</p>
+    </footer>
+
+    
       <!-- <script>
               const calendar = new VanillaCalendar({
                       HTMLElement: document.querySelector('.vanilla-calendar'),

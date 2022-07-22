@@ -36,16 +36,16 @@ function adjustHeaderText(type) {
     // conditions
     if(time>='18' && time<'24'){timeMessage='evening';  typeCss='titd-evening';}
     if(time>='12' && time<'18'){timeMessage='afternoon'; typeCss='titd-afternoon'; }headerMessage = 'Smile Out Loud';
-    if(time>='6' && time<'12'){timeMessage='morning'; typeCss='titd-morning'; headerMessage = '3 4 Me'; switchButton.setAttribute('checked',true);}
+    if(time>='6' && time<'12'){timeMessage='morning'; typeCss='titd-morning'; headerMessage = '3 4 Me'; }
     // if type == todo
     if(type=='1'){
-        headerMessage = 'To Do';
+        headerMessage = 'To-do';
         timeMessage='todo';
         typeCss='titd-todo';
     }
     // if type == notes
     if(type=='2'){
-        headerMessage = 'Notes';
+        headerMessage = 'Note';
         timeMessage='notes';
         typeCss='titd-notes';
     }
@@ -66,9 +66,10 @@ function adjustHeaderText(type) {
     const message = document.getElementById('message');
     let range = document.getElementById('range-input');
     const logo = document.getElementById('logo');    
-    localStorage.getItem('range')!=null ? range = localStorage.getItem('range') : range.value = '5'
+    // localStorage.getItem('range')!=null ? range = localStorage.getItem('range') : range.value = '5'
 
     // set title & placeholder text
+    headerMessage = 'Add a '+headerMessage+' then press enter';
     placeholderText.setAttribute("placeholder",headerMessage);
     // change title
     message.className = timeMessage;
@@ -76,7 +77,7 @@ function adjustHeaderText(type) {
     logo.className = timeMessage;
     // change bg
     document.body.className = typeCss;
-    console.log('css set to: ' + typeCss);
+    // console.log('css set to: ' + typeCss);
     // emojis
     const emojis = document.getElementById('emojis-container');
     emojis.style.display = 'none';
@@ -130,8 +131,8 @@ function buildUi( uuid, colour, message, progress, complete, todo  ){
     const d = new Date(todo);
             todo == null ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
 row = `
-            <div class="row" data-id="${uuid}" data-value="${message}" data-colour="${colour}" class="row">
-                <div class="col-sm-1">
+            <tr data-id="${uuid}" data-value="${message}" data-colour="${colour}">
+                <td>
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
                     <div class="colours">`
                     for(x=0; x<3; x++) {
@@ -140,37 +141,37 @@ row+=`
         }
 row+=`
                     </div>
-                </div>`;
+                </td>`;
 if(window.localStorage.getItem('type')=='0'){
 row+=`
-                <div class="col-sm-10">
+                <td>
                     <input type="text" data-mode="text" id="input-${uuid}" value="${message}" class="text-box" />
                     <div class="text" data-mode="text" id="text-${uuid}">${message}</div>
-                </div>`;
+                </td>`;
             } else {
                 progress==0 ? progressClass='times-' : progressClass='check-';
                 complete==0 ? completeClass='' : completeClass='-circle-o';
 row+=`
-                <div class="col-sm-6">
+                <td>
                     <input type="text" data-mode="text" id="input-${uuid}" value="${message}" class="text-box" />
                     <div class="text" data-mode="text" id="text-${uuid}">${message}</div>
-                </div>
-                <div class="col-sm-2">
+                </td>
+                <td>
                     <i class="fa fa-calendar-o" data-mode="calendar"></i>
                     <span class="todo-text">${todo}</span>
-                    </div>
-                <div class="col-sm-1">
+                </td>
+                <td>
                     <i class="fa fa-${progressClass}circle-o" title="Underway?" data-mode="progress" data-value="${progress}"></i>
-                </div>
-                <div class="col-sm-1">
+                </td>
+                <td>
                     <i class="fa fa-check${completeClass}" title="Complete" data-mode="complete" data-value="1"></i>
-                </div>`;
+                </td>`;
         }
 row+=`
-                <div class="col-sm-1">
+                <td>
                     <i class="fa fa-trash" data-mode="delete" aria-hidden="true"></i>
-                </div>
-            </div>`;
+                </td>
+            </tr>`;
     return row;
 }
 
