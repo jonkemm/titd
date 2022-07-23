@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+	<title>moon</title>
+	<defs>
+		<image  width="512" height="150" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAACWAQMAAACSFqLOAAAAAXNSR0IB2cksfwAAAANQTFRFAAAAp3o92gAAACBJREFUeJztwQENAAAAwqD3T20PBxQAAAAAAAAAAAA/BiYWAAGDwvGdAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+		.s0 { fill: none;stroke: #ffffff } 
+	</style>
+	<use id="Layer 1" href="#img1" x="-58" y="-68"/>
+	<path id="Shape 1" class="s0" d="m15 1c0 0-11 3.9-2 18 5.9 9.3 17 4 17 4 0 0-18.5 17.3-27-2-7.2-16.2 12-20 12-20z"/>
+</svg>
