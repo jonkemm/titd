@@ -3,11 +3,73 @@ click on
 */
 
 
+
+
+
+
+
+
+// This works on all devices/browsers, and uses IndexedDBShim as a final fallback 
+var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+
+// Open (or create) the database
+var open = indexedDB.open("MyDatabase", 1);
+
+// Create the schema
+open.onupgradeneeded = function() {
+    var db = open.result;
+    var store = db.createObjectStore("MyObjectStore", {keyPath: "uuid"});
+    var index = store.createIndex("NameIndex", ["uuid", "text", "colour", "progress", "complete", "todo"]);
+};
+
+open.onsuccess = function() {
+    // Start a new transaction
+    var db = open.result;
+    var tx = db.transaction("MyObjectStore", "readwrite");
+    var store = tx.objectStore("MyObjectStore");
+    var index = store.index("NameIndex");
+
+    // Add some data
+
+    store.put({uuid: 12345, text: "testicles", colour: 0, progress: 0, complete: 0, todo: 0});
+    // store.put({id: 12345, name: {first: "John", last: "Doe"}, age: 42});
+    // store.put({id: 67890, name: {first: "Bob", last: "Smith"}, age: 35});
+    
+    // Query the data
+    window.getJohn = store.get(12345);
+    window.items= store.get(12345);
+    // var getBob = index.get(["Smith", "Bob"]);
+
+    // getJohn.onsuccess = function() {
+    //     console.log(getJohn.result.name.first);  // => "John"
+    // };
+
+    // getBob.onsuccess = function() {
+    //     console.log(getBob.result.name.first);   // => "Bob"
+    // };
+
+    // Close the db when the transaction is done
+    tx.oncomplete = function() {
+        db.close();
+    };
+}
+
+
+
+
+
+
+
+
+
+
+
 let requestURL = '';
 
 // read();
-
+let items = window.items;
 monitor();
+printTodos(items);
 
 // readEmojis();
 
@@ -130,12 +192,12 @@ async function monitor() {
 function buildUi( uuid, colour, message, progress, complete, todo  ){
     const d = new Date(todo);
             todo == null ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
-row = `
+let row = `
             <tr data-id="${uuid}" data-value="${message}" data-colour="${colour}">
                 <td>
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
                     <div class="colours">`
-                    for(x=0; x<3; x++) {
+                    for(let x=0; x<3; x++) {
 row+=`
                         <div class="rc-${x}" data-mode="colour" data-value="${x}" /></div>`;
         }
@@ -178,6 +240,8 @@ row+=`
 //  render rows in #items
 function printTodos(items) {
     var div = document.getElementById('items');
+
+    console.log('items; '+items);
     let rowBuild = '';
     let count=0;
     for (let i in items ) {
@@ -199,8 +263,10 @@ function printTodos(items) {
             dark = ' dark';
         }
          rowBuild=`
-            <div class="no-records${dark}" id="no-records">To add items, use the box above.</div>
-            `;
+            <tr>
+                <td class="no-records${dark}" id="no-records">To add items, use the box above.</td>
+            </tr>
+        `;
     }
      div.innerHTML=rowBuild;
      return div;

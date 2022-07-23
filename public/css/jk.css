@@ -2,16 +2,32 @@
 body{
     font-size: 20px;
     color: #fff;
+    font-family: sans-serif;
 }
-/* bod```````````` */
+/* body */
 a{
     color: #fff;
     text-decoration: none;
 }
 h1,h2,h3,nav{
-    font-family: sans-serif;
     font-family: 'Macondo', sans-serif;
     font-size:1em;
+}
+h1{
+    font-size: 1.4em;
+}
+h2{
+    font-size: 1.2em;
+}
+li h2{
+    list-style: none;
+    margin-left: -1em;
+}
+ul{
+    padding: 0;
+}
+li ul{
+    margin-bottom: 1em;
 }
 header input, header span, nav{
     color: #fff;

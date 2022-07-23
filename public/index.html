@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,133 +15,120 @@
   <script>var exports = {};</script>
   <!-- <script defer src="./js/vanilla-calendar.js"></script> -->
   <script defer src="js/functions.js" type="module" defer ></script>
+  <script defer src="js/ui.js" type="module" defer ></script>
   <!-- <script defer src="js/db.js" type="module" defer ></script> -->
 </head>
 <body class="titd-dark">
-  <div class="container">
-      <div id="screen-top">
-              <nav id="nav">
-                <a href="#">
-                    <h1>This is the day</h1>
-                </a>
-                <div>
-                    <ul>
-                        <!-- <li class="header-range">
-                            <form id="rating-form" action="/add_rating" method="get">
-                                <fieldset>
-                                    <legend>Add rating</legend>
-                                    <div id="range-container">
-                                        <div class="input-group" id="range">
-                                            <input 
-                                                type="range" 
-                                                class="form-input" 
-                                                id="range-input"
-                                                max="10"
-                                                data-value="range"
-                                                name="range-input"
-                                                value="${uuid}"
-                                            >
-                                        </div>
-                                        <div id="range-display"></div>
-                                        <input type="hidden" name="uuid" id="uuid" value="">
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </li> -->
-                        <li><a data-value="titd" title="Read your intentions / reflections">titd</a></li>
-                        <li><a data-value="find" title="Find ideas / days">Reflect</a></li>
-                        <li><a data-value="todos" title="Links to lovely things to try">To do</a></li>
-                        <li><a data-value="notes" title="Keep a diary">Notes</a></li>
-                        <li class="icons"><a data-value="dark" title="Dark mode"><i class="fa fa-moon-o" id="dark" data-value="dark" aria-hidden="true"></i></a>
-                        <a data-value="share" title="Share"><i class="fa fa-whatsapp" data-value="share" aria-hidden="true"></i><input id="share-item-text" type="hidden" /></a>
-                        <a title="Log out"><i class="fa fa-sign-out logout" aria-hidden="true"></i></a></li>
-                     </ul>
-                </div>
-
-              </nav>
-              <header>
-                      <div class="row">
-                        <form id="add-item-form" class="add">
-                            <fieldset>
-                                <legend>Add item</legend>
-                                <div class="input-group mb-3" id="add-item">
-                                    <input id="add-item-text"  name="message" required class="form-control" placeholder="Add a note, press enter to save it" />
-                                    <div id="logo" class="afternoon">
-                                        <div id="message" class="afternoon" data-value="show-emojis"></div>
-                                    </div>
-                                    <input type="hidden" name="type" id="add-item-type" value="0" />
-                                    <input type="hidden" name="colour" id="add-item-colour" value="0" />
-                                    <div id="emojis-container"></div>
-                                </div>
-                            </fieldset>
-                        </form>
-                      </div>
-              </header>
-      </div>
-      <main>
-              <!-- <div id="calendar-container">
-                      <div class="switch-container"> am <div class="switch"> <input type="checkbox" id="switchButton" /><label for="switchButton">Toggle</label> </div> pm </div>
-                      <div class="vanilla-calendar" id="vanilla-calendar-01"></div>
-              </div> -->
-              <table class="table-responsive">
-                <tbody id="items"></tbody>
-              </table>
-      </main>
-      
-
-
-
-      <form name="whiskeyForm">
-        <fieldset>
-          <p>
-            <label for="name">Whiskey: </label>
-            <input type="text" id="name" placeholder="Whiskey Name" required />
-          </p>
-          <p>
-            <label for="country">Country of Origin: </label>
-            <input type="text" id="country" value="" required />
-          </p>
-          <p>
-            <label for="age">Years Old: </label>
-            <input
-              type="text"
-              inputmode="numeric"
-              pattern="[\d]+"
-              id="age"
-              required
-            />
-          </p>
-          <p>
-            <label for="isOwned">Owned: </label>
-            <input type="checkbox" id="isOwned" value="yes" />
-          </p>
-          <p>
-            <button id="btnAdd">Add Whiskey</button>
-            <button id="btnUpdate">Update Whiskey</button>
-            <button id="btnDelete">Delete Whiskey</button>
-            <button id="btnClear">Reset Form</button>
-          </p>
-        </fieldset>
-      </form>
-
-      <section>
-        <h3 class="listTitle">List of Whiskeys</h3>
-        <ul class="wList">
-          <!-- build list here -->
-        </ul>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2021 Chicken Stuff Inc.</p>
-    </footer>
-
+    <h1>How we use our This is the Day App</h1>
+    <p class=“intro”>This is the Day is a designed to record your intentions for the day ahead ( 3 Me) and moments that made you Smile Out Loud.</p>
+    <p>Our day usually goes something like this(ish!):</p>
+    <ol>
+        <li>Cup of tea in bed</li>
+        <li>Shower with a cold bit at the end</li>
+        <li>2nd cup of tea and breakfast</li>
+        <li>Wim Hoff breathing exercise</li>
+        <li>Choose about 3 intentions (3 4 for Me)
+            <h2>3 4 Me suggestions:</h2>
+            <ul>
+                <li>Have a relaxing morning</li>
+                <li>Join the bees for a coffee in the garden</li>
+                <li>Do some Yoga Nidra</li>
+                <li>Take the dog for a walk</li>
+                <li>Be kind to that annoying bloke at work</li>
+            </ul>
+        </li>
+        <li>We then try and be mindful of our 3 4 Me intentions during the day.</li>
+        <li>At bed time we record moments in the day that made us Smile Out Loud or happy moments
+            <h2>Smile Out Loud suggestions</h2>
+            <ul>
+                <li>Had a nice time in the sun</li>
+                <li>Watched a silly film</li>
+                <li>Did some exercises</li>
+                <li>I found a pound!</li>
+                <li>An old lady told me a funny joke</li>
+                <li>Had a great sandwich</li>
+            </ul>
+        </li>
+        <li>Then we do a Yoga Nidra exercise and pass out</li>
+    </ul>
     
-      <!-- <script>
-              const calendar = new VanillaCalendar({
-                      HTMLElement: document.querySelector('.vanilla-calendar'),
-              });
-              calendar.init();
-      </script> -->
-  </div>
+  <div class="container">
+    <div id="screen-top">
+            <nav id="nav">
+              <a href="#">
+                  <h1>This is the day</h1>
+              </a>
+              <div>
+                  <ul>
+                      <!-- <li class="header-range">
+                          <form id="rating-form" action="/add_rating" method="get">
+                              <fieldset>
+                                  <legend>Add rating</legend>
+                                  <div id="range-container">
+                                      <div class="input-group" id="range">
+                                          <input 
+                                              type="range" 
+                                              class="form-input" 
+                                              id="range-input"
+                                              max="10"
+                                              data-value="range"
+                                              name="range-input"
+                                              value="${uuid}"
+                                          >
+                                      </div>
+                                      <div id="range-display"></div>
+                                      <input type="hidden" name="uuid" id="uuid" value="">
+                                  </div>
+                              </fieldset>
+                          </form>
+                      </li> -->
+                      <li><a data-value="titd" title="Read your intentions / reflections">titd</a></li>
+                      <li><a data-value="find" title="Find ideas / days">Reflect</a></li>
+                      <li><a data-value="todos" title="Links to lovely things to try">To do</a></li>
+                      <li><a data-value="notes" title="Keep a diary">Notes</a></li>
+                      <li class="icons"><a data-value="dark" title="Dark mode"><i class="fa fa-moon-o" id="dark" data-value="dark" aria-hidden="true"></i></a>
+                      <a data-value="share" title="Share"><i class="fa fa-whatsapp" data-value="share" aria-hidden="true"></i><input id="share-item-text" type="hidden" /></a>
+                      <a title="Log out"><i class="fa fa-sign-out logout" aria-hidden="true"></i></a></li>
+                   </ul>
+              </div>
+
+            </nav>
+            <header>
+                    <div class="row">
+                      <form id="add-item-form" class="add">
+                          <fieldset>
+                              <legend>Add item</legend>
+                              <div class="input-group mb-3" id="add-item">
+                                  <input id="add-item-text"  name="message" required class="form-control" placeholder="Add a note, press enter to save it" />
+                                  <div id="logo" class="afternoon">
+                                      <div id="message" class="afternoon" data-value="show-emojis"></div>
+                                  </div>
+                                  <input type="hidden" name="type" id="add-item-type" value="0" />
+                                  <input type="hidden" name="colour" id="add-item-colour" value="0" />
+                                  <div id="emojis-container"></div>
+                              </div>
+                          </fieldset>
+                      </form>
+                    </div>
+            </header>
+    </div>
+    <main>
+        <!-- <div id="calendar-container">
+                <div class="switch-container"> am <div class="switch"> <input type="checkbox" id="switchButton" /><label for="switchButton">Toggle</label> </div> pm </div>
+                <div class="vanilla-calendar" id="vanilla-calendar-01"></div>
+        </div> -->
+        <table class="table-responsive">
+            <tbody id="items"></tbody>
+        </table>
+    </main>
+
+  
+    <!-- <script>
+            const calendar = new VanillaCalendar({
+                    HTMLElement: document.querySelector('.vanilla-calendar'),
+            });
+            calendar.init();
+    </script> -->
+</div>
 </body>
 </html>
