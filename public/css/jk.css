@@ -173,6 +173,14 @@ fieldset{
 
 .table-responsive{
     overflow-x:auto;
+    width: 100%;
+}
+td.icon{
+    width: 1em;
+    text-align: right;
+}
+td{
+    padding: 0.6em;
 }
 #items{
     margin: 0;
@@ -274,10 +282,10 @@ fieldset{
     z-index: 1;
 }
 .colours div, #items .show{
-    width: 2em;
-    height: 2em;
-    border-radius: 0.5em;
-    border: 2px solid #fff;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.25em;
+    border: 1px solid #fff;
     margin-right: 0.5em;
 }
 /* /pastille yellow bg */

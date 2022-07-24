@@ -1,5 +1,69 @@
 import { monitor, waitFor, adjustHeaderText, buildUi, printTodos, readShare, printShare } from './ui.js';
 
+
+
+
+
+
+
+// This works on all devices/browsers, and uses IndexedDBShim as a final fallback 
+var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+
+// Open (or create) the database
+var open = indexedDB.open("TitD", 1);
+
+// Create the schema
+open.onupgradeneeded = function() {
+    var db = open.result;
+    var store = db.createObjectStore("items", {keyPath: "uuid"});
+    var index = store.createIndex("NameIndex", ["uuid", "text", "colour", "progress", "complete", "todo"]);
+};
+
+function makeTX(storeName, mode) {
+    let tx = db.transaction(storeName, mode);
+    tx.onerror = (err) => {
+      console.warn(err);
+    };
+    return tx;
+  }
+  
+open.onsuccess = function() {
+    // Start a new transaction
+    var db = open.result;
+    var tx = db.transaction("items", "readwrite");
+    var store = tx.objectStore("items");
+    var index = store.index("NameIndex");
+
+    // Add some data
+    // store.put({"uuid": 12345, "text": "testicles", colour: 0, progress: 0, complete: 0, todo: 0});
+    // store.put({"uuid": 12346, "text": "balls", colour: 0, progress: 0, complete: 0, todo: 0});
+    
+    // Query the data
+    // window.getJohn = store.get(12345);
+    var results= store.getAll();
+
+    results.onsuccess = function() {
+        let resultsjk = results.result;
+        printTodos(resultsjk);
+    };
+
+    // getBob.onsuccess = function() {
+    //     console.log(getBob.result.name.first);   // => "Bob"
+    // };
+
+
+    // Close the db when the transaction is done
+    tx.oncomplete = function() {
+        db.close();
+    };
+}
+
+
+
+
+
+
+
 // // fn to send js to the server
 // function sending (requestURL) {
 //     // if url is set, send it
@@ -136,61 +200,7 @@ const add = document.getElementById('add-item-form');
 add.addEventListener('submit', e => {
     e.preventDefault();
     // In the following line, you should include the prefixes of implementations you want to test.
-
-
 })
-
-
-
-
-
-
-const IDB = (function init() {
-    let db = null;
-    let objectStore = null;
-    let DBOpenReq = indexedDB.open('WhiskeyDB', 6);
-  
-    DBOpenReq.addEventListener('error', (err) => {
-      //Error occurred while trying to open DB
-      console.warn(err);
-    });
-    DBOpenReq.addEventListener('success', (ev) => {
-      //DB has been opened... after upgradeneeded
-      db = ev.target.result;
-      console.log('success', db);
-    });
-    DBOpenReq.addEventListener('upgradeneeded', (ev) => {
-      //first time opening this DB
-      //OR a new version was passed into open()
-      db = ev.target.result;
-      let oldVersion = ev.oldVersion;
-      let newVersion = ev.newVersion || db.version;
-      console.log('DB updated from version', oldVersion, 'to', newVersion);
-  
-      console.log('upgrade', db);
-      if (!db.objectStoreNames.contains('whiskeyStore')) {
-        objectStore = db.createObjectStore('whiskeyStore', {
-          keyPath: 'id',
-        });
-      }
-      // db.createObjectStore('foobar');
-      if (db.objectStoreNames.contains('foobar')) {
-        db.deleteObjectStore('foobar');
-      }
-    });
-    const whiskeyForm = document.getElementById('add-item-form')
-    whiskeyForm.addEventListener('submit', (ev) => {
-      ev.preventDefault();
-      //one of the form buttons was clicked
-      console.log('add item')
-    });
-  })();
-
-
-
-
-
-
 // // click calendar link
 // const cal = document.getElementById('vanilla-calendar-01');
 // // on click
@@ -219,101 +229,132 @@ const IDB = (function init() {
 //     document.getElementById('calendar-container').style.display='none';
 // });
     
-// main function
-const itemsList = document.getElementById('items');
-// on click
-itemsList.addEventListener('click', (e) => {  
-    // vars
-    let id = e.target.parentElement.parentElement.getAttribute("data-id");
-    let mode = e.target.getAttribute("data-mode");
-    // changing the text?
-    // if( mode === 'text' ) {
-    //     // vars
-    //     const searchbox = document.getElementById('input-'+id);
-    //     console.log('id: '+id);
-    //     console.log('searchbox: '+searchbox);
-    //     // hide text, show input
-    //     e.target.style.display="none";
-    //     console.log('hidden the div');
-    //     searchbox.style.display="block";
-    //     console.log('shown the textbox');
-    //     requestUrl = searchbox.addEventListener('keydown', function(e) {
-    //         if (e.code === "Enter") {  
-    //             // vars
-    //             const searchbox = document.getElementById('input-'+id);
-    //             const searchDiv = document.getElementById('text-'+id);
-    //             const input = this.value;
-    //             const mode = 'text';
-    //             const requestURL = '/update/' + id + '/' + mode + '/' + input + '/' + type;
-    //             console.log('url to be sent (text): '+requestURL); // console log
-    //             // hide text, show input
-    //             searchbox.style.display="none";
-    //             searchDiv.style.display = "block";
+// // main function
+// const itemsList = document.getElementById('items');
+// // // on click
+// // itemsList.addEventListener('click', (e) => {  
+//     // vars
+//     const id = e.target.parentElement.parentElement.getAttribute("data-id");
+//     const mode = e.target.getAttribute("data-mode");
+//     // changing the text?
+//     // if( mode === 'text' ) {
+//     //     // vars
+//     //     const searchbox = document.getElementById('input-'+id);
+//     //     console.log('id: '+id);
+//     //     console.log('searchbox: '+searchbox);
+//     //     // hide text, show input
+//     //     e.target.style.display="none";
+//     //     console.log('hidden the div');
+//     //     searchbox.style.display="block";
+//     //     console.log('shown the textbox');
+//     //     requestUrl = searchbox.addEventListener('keydown', function(e) {
+//     //         if (e.code === "Enter") {  
+//     //             // vars
+//     //             const searchbox = document.getElementById('input-'+id);
+//     //             const searchDiv = document.getElementById('text-'+id);
+//     //             const input = this.value;
+//     //             const mode = 'text';
+//     //             const requestURL = '/update/' + id + '/' + mode + '/' + input + '/' + type;
+//     //             console.log('url to be sent (text): '+requestURL); // console log
+//     //             // hide text, show input
+//     //             searchbox.style.display="none";
+//     //             searchDiv.style.display = "block";
 
             
-    //             sending(requestURL);
-    //         }
-    //     });
-    // }
-    if (e.target.className.includes("show" )) {
-        let colours = e.target.nextElementSibling;
-        colours.style.display = 'flex';
-    }
-    if( mode=='delete') {
-        // vars
-        value = e.target.parentElement.parentElement.getAttribute("data-value");
-        // set url
-        // requestURL = '/update/' + id + '/delete/' + value + '/' + type;
-        // console.log('url to be sent: '+requestURL);
-        // return;
-        // check if ok to delete
-        var r=confirm("Are you sure you want to delete '"+value+"'?");
-        if (r==true)
-        {
-            // remove row from original table
-            e.target.parentElement.parentElement.remove();
-        } else  {
-            // do nothing
-            requestURL = '';
-            return;
-        }
-    }
-    if(mode=='progress') {
-        // vars
-        value = e.target.getAttribute("data-value");
-        value == '0' ? value = '1' : value = '0'
-        value == '0' ? e.target.className='fa-circle-o' : e.target.className='fa-check-circle-o';
-        // set url
-        // requestURL = '/update/' + id + '/progress/' + value + '/' + type;
-    }
-    if(mode=='complete') {
-        // requestURL = '/update/' + id + '/complete/1/' + type;
-    }
-    if(mode==="colour" ) {
-        // vars
-        const value = e.target.getAttribute("data-value");
-        const id = e.target.parentElement.parentElement.parentElement.getAttribute("data-id");
-        // build url
-        // requestURL = '/update/' + id + '/' + mode + '/' + value + '/' + type;
-        // console.log('url to be sent <colour>: '+requestURL); // console log
-        // set colour of dot
-        let dot = document.getElementById('dot-' + id);
-        dot.className='rc-'+value + ' show';
-        // console.log(dot.className);
-        // set local storage
-        localStorage.setItem('colour', value);
-        console.log('localStorage set to: '+ value)
-        // hide colours
-        e.target.parentElement.style.display='none';
-        // call function to send request
-        sending(requestURL);
+//     //             sending(requestURL);
+//     //         }
+//     //     });
+//     // }
+//     if (e.target.className.includes("show" )) {
+//         let colours = e.target.nextElementSibling;
+//         colours.style.display = 'flex';
+//     }
+//     if( mode=='delete') {
+//         // vars
+//         const value = e.target.parentElement.parentElement.getAttribute("data-value");
+//         // set url
+//         // requestURL = '/update/' + id + '/delete/' + value + '/' + type;
+//         // console.log('url to be sent: '+requestURL);
+//         // return;
+//         // check if ok to delete
+//         const r=confirm("Are you sure you want to delete '"+value+"'?");
+//         if (r==true)
+//         {
+//             // remove row from original table
+//             // e.target.parentElement.parentElement.remove();
 
-    }
-    if(mode=='calendar'){
-        const calendar = document.getElementById('calendar-container');
-        calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';        
-        window.localStorage.setItem('uuid', id);
-    }
-    // call function to send request
-    // sending(requestURL);
-});
+
+
+
+
+//             // let key = id;
+//             // console.log(key);
+//             // if (key) {
+//             //   let tx = makeTX('items', 'readwrite');
+//             //   tx.oncomplete = (ev) => {
+//             //     console.log(ev);
+//             //     buildList();
+//             //     clearForm();
+//             //   };
+        
+//             //   let store = tx.objectStore('items');
+//             //   let request = store.delete(key); //request a delete
+        
+//             //   request.onsuccess = (ev) => {
+//             //     console.log('successfully deleted an object');
+//             //     //move on to the next request in the transaction or
+//             //     //commit the transaction
+//             //   };
+//             //   request.onerror = (err) => {
+//             //     console.log('error in request to delete');
+//             //   };
+//             // }
+
+
+
+
+//         } else  {
+//             // do nothing
+//             requestURL = '';
+//             return;
+//         }
+//     }
+//     if(mode=='progress') {
+//         // vars
+//         value = e.target.getAttribute("data-value");
+//         value == '0' ? value = '1' : value = '0'
+//         value == '0' ? e.target.className='fa-circle-o' : e.target.className='fa-check-circle-o';
+//         // set url
+//         // requestURL = '/update/' + id + '/progress/' + value + '/' + type;
+//     }
+//     if(mode=='complete') {
+//         // requestURL = '/update/' + id + '/complete/1/' + type;
+//     }
+//     if(mode==="colour" ) {
+//         // vars
+//         const value = e.target.getAttribute("data-value");
+//         const id = e.target.parentElement.parentElement.parentElement.getAttribute("data-id");
+//         // build url
+//         // requestURL = '/update/' + id + '/' + mode + '/' + value + '/' + type;
+//         // console.log('url to be sent <colour>: '+requestURL); // console log
+//         // set colour of dot
+//         let dot = document.getElementById('dot-' + id);
+//         dot.className='rc-'+value + ' show';
+//         // console.log(dot.className);
+//         // set local storage
+//         localStorage.setItem('colour', value);
+//         console.log('localStorage set to: '+ value)
+//         // hide colours
+//         e.target.parentElement.style.display='none';
+//         // call function to send request
+//         sending(requestURL);
+
+//     }
+//     if(mode=='calendar'){
+//         const calendar = document.getElementById('calendar-container');
+//         calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';        
+//         window.localStorage.setItem('uuid', id);
+//     }
+//     // call function to send request
+//     // sending(requestURL);
+// });

@@ -1,5 +1,5 @@
 /*
-click on 
+click on your mum
 */
 
 
@@ -8,51 +8,6 @@ click on
 
 
 
-
-// This works on all devices/browsers, and uses IndexedDBShim as a final fallback 
-var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
-
-// Open (or create) the database
-var open = indexedDB.open("MyDatabase", 1);
-
-// Create the schema
-open.onupgradeneeded = function() {
-    var db = open.result;
-    var store = db.createObjectStore("MyObjectStore", {keyPath: "uuid"});
-    var index = store.createIndex("NameIndex", ["uuid", "text", "colour", "progress", "complete", "todo"]);
-};
-
-open.onsuccess = function() {
-    // Start a new transaction
-    var db = open.result;
-    var tx = db.transaction("MyObjectStore", "readwrite");
-    var store = tx.objectStore("MyObjectStore");
-    var index = store.index("NameIndex");
-
-    // Add some data
-
-    store.put({uuid: 12345, text: "testicles", colour: 0, progress: 0, complete: 0, todo: 0});
-    // store.put({id: 12345, name: {first: "John", last: "Doe"}, age: 42});
-    // store.put({id: 67890, name: {first: "Bob", last: "Smith"}, age: 35});
-    
-    // Query the data
-    window.getJohn = store.get(12345);
-    window.items= store.get(12345);
-    // var getBob = index.get(["Smith", "Bob"]);
-
-    // getJohn.onsuccess = function() {
-    //     console.log(getJohn.result.name.first);  // => "John"
-    // };
-
-    // getBob.onsuccess = function() {
-    //     console.log(getBob.result.name.first);   // => "Bob"
-    // };
-
-    // Close the db when the transaction is done
-    tx.oncomplete = function() {
-        db.close();
-    };
-}
 
 
 
@@ -69,7 +24,6 @@ let requestURL = '';
 // read();
 let items = window.items;
 monitor();
-printTodos(items);
 
 // readEmojis();
 
@@ -122,7 +76,7 @@ function adjustHeaderText(type) {
         itemsBg.style.backgroundImage = "url('img/bg-repeat-outline.svg')";
         if(noRecords != null)noRecords.className = 'no-records dark';
     }
-    console.log('dark set to: ' + dark);
+    // console.log('dark set to: ' + dark);
     // vars
     const placeholderText = document.getElementById('add-item-text');
     const message = document.getElementById('message');
@@ -157,22 +111,6 @@ async function monitor() {
     // monitor();
 };
 
-// // build item rows
-// function read() {
-//     var request = new XMLHttpRequest();
-//     var isodate = new Date().toISOString();
-//     // if type is in local storage
-//     window.localStorage.getItem('type')!=null ? type = window.localStorage.getItem('type') : type=0; window.localStorage.setItem('type', '0');
-//     var requestURL = '/read/'+isodate + '/'+type;
-//     request.open('GET', requestURL);
-//     request.responseType = 'json';
-//     request.send();
-//     request.onload = function() {
-//         var items = request.response;
-//         printTodos(items);
-//     }
-// }
-
 
 // // get live collection data
 // onSnapshot(qType, (snapshot) => {
@@ -194,7 +132,7 @@ function buildUi( uuid, colour, message, progress, complete, todo  ){
             todo == null ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
 let row = `
             <tr data-id="${uuid}" data-value="${message}" data-colour="${colour}">
-                <td>
+                <td class="icon">
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
                     <div class="colours">`
                     for(let x=0; x<3; x++) {
@@ -230,7 +168,7 @@ row+=`
                 </td>`;
         }
 row+=`
-                <td>
+                <td class="icon">
                     <i class="fa fa-trash" data-mode="delete" aria-hidden="true"></i>
                 </td>
             </tr>`;
@@ -241,7 +179,7 @@ row+=`
 function printTodos(items) {
     var div = document.getElementById('items');
 
-    console.log('items; '+items);
+    // return;
     let rowBuild = '';
     let count=0;
     for (let i in items ) {
