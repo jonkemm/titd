@@ -71,71 +71,6 @@ const IDB = (function init() {
 
   });
 
-  document.getElementById('btnUpdate').addEventListener('click', (ev) => {
-    ev.preventDefault();
-
-    let name = document.getElementById('name').value.trim();
-    let country = document.getElementById('country').value.trim();
-    let age = parseInt(document.getElementById('age').value);
-    let owned = document.getElementById('isOwned').checked;
-    //id
-    let key = document.whiskeyForm.getAttribute('data-key');
-    if (key) {
-      let whiskey = {
-        id: key,
-        name,
-        country,
-        age,
-        owned,
-        lastEdit: Date.now(),
-      };
-      let tx = makeTX('items', 'readwrite');
-      tx.oncomplete = (ev) => {
-        console.log(ev);
-        buildList();
-        clearForm();
-      };
-
-      let store = tx.objectStore('items');
-      let request = store.put(whiskey); //request a put/update
-
-      request.onsuccess = (ev) => {
-        console.log('successfully updated an object');
-        //move on to the next request in the transaction or
-        //commit the transaction
-      };
-      request.onerror = (err) => {
-        console.log('error in request to update');
-      };
-    }
-  });
-
-  document.getElementById('btnDelete').addEventListener('click', (ev) => {
-    ev.preventDefault();
-    //id
-    let key = document.whiskeyForm.getAttribute('data-key');
-    if (key) {
-      let tx = makeTX('items', 'readwrite');
-      tx.oncomplete = (ev) => {
-        console.log(ev);
-        buildList();
-        clearForm();
-      };
-
-      let store = tx.objectStore('items');
-      let request = store.delete(key); //request a delete
-
-      request.onsuccess = (ev) => {
-        console.log('successfully deleted an object');
-        //move on to the next request in the transaction or
-        //commit the transaction
-      };
-      request.onerror = (err) => {
-        console.log('error in request to delete');
-      };
-    }
-  });
-
   document.getElementById('add-item-form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     //one of the form buttons was clicked
@@ -155,7 +90,6 @@ const IDB = (function init() {
     tx.oncomplete = (ev) => {
       //console.log(ev);
       buildList();
-      clearForm();
     };
 
     let store = tx.objectStore('items');
@@ -170,6 +104,9 @@ const IDB = (function init() {
       console.log('error in request to add');
     };
   });
+
+  document.getElementById('items').addEventListener('click', (ev) => {
+  })
 
   function buildList() {
     //use getAll to get an array of objects from our store
@@ -238,13 +175,5 @@ const IDB = (function init() {
       console.warn(err);
     };
     return tx;
-  }
-  
-  document.getElementById('btnClear').addEventListener('click', clearForm);
-
-  function clearForm(ev) {
-    if (ev) ev.preventDefault();
-    document.whiskeyForm.reset();
-    document.whiskeyForm.removeAttribute('data-key');
   }
 })();
