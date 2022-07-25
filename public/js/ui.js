@@ -182,7 +182,10 @@ function printTodos(items) {
     // return;
     let rowBuild = '';
     let count=0;
+    console.log(items.result);
+    items = items.result;
     for (let i in items ) {
+        // items[i] = items[i].result;
         // data
         const uuid = items[i].uuid;
         const text = items[i].text;

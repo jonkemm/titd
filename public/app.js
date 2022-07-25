@@ -1,6 +1,6 @@
-// import { uid } from './uid.js';
-// import { state } from './data.js';
-import { buildUi,printTodos } from "./js/ui.js";
+import { uid } from './uid.js';
+import { state } from './data.js';
+import { printTodos } from './js/ui.js';
 
 //https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase
 
@@ -42,6 +42,8 @@ const IDB = (function init() {
           });
         }
       };
+    } else {
+      buildList();
     }
   });
 
@@ -68,53 +70,50 @@ const IDB = (function init() {
     
 
   });
-  
-  function makeTX(storeName, mode) {
-    let tx = db.transaction(storeName, mode);
-    tx.onerror = (err) => {
-      console.warn(err);
-    };
-    return tx;
-  }
 
+  document.getElementById('btnUpdate').addEventListener('click', (ev) => {
+    ev.preventDefault();
 
-
-  var results= objectStore.getAll();
-
-  results.onsuccess = function() {
-      let resultsjk = results.result;
-      printTodos(resultsjk);
-      console.log(resultsjk);
-  };
-
-
-
-  // let tx = makeTX('items', 'readwrite');
-  // tx.oncomplete = (ev) => {
-  //   console.log(ev);
-  //   // buildList();
-  //   // clearForm();
-  // };
-
-  // let store = tx.objectStore('items');
-  // let request = store.delete(key); //request a delete
-
-
-
-  
-
-  
-
-  const itemsList = document.getElementById('items');
-  // on click
-  itemsList.addEventListener('click', (e) => {  
-    const id = e.target.parentElement.parentElement.getAttribute("data-id");
-    const mode = e.target.getAttribute("data-mode");
-
-    if( mode=='delete') {
+    let name = document.getElementById('name').value.trim();
+    let country = document.getElementById('country').value.trim();
+    let age = parseInt(document.getElementById('age').value);
+    let owned = document.getElementById('isOwned').checked;
     //id
-    let key = id;
-    console.log(key);
+    let key = document.whiskeyForm.getAttribute('data-key');
+    if (key) {
+      let whiskey = {
+        id: key,
+        name,
+        country,
+        age,
+        owned,
+        lastEdit: Date.now(),
+      };
+      let tx = makeTX('items', 'readwrite');
+      tx.oncomplete = (ev) => {
+        console.log(ev);
+        buildList();
+        clearForm();
+      };
+
+      let store = tx.objectStore('items');
+      let request = store.put(whiskey); //request a put/update
+
+      request.onsuccess = (ev) => {
+        console.log('successfully updated an object');
+        //move on to the next request in the transaction or
+        //commit the transaction
+      };
+      request.onerror = (err) => {
+        console.log('error in request to update');
+      };
+    }
+  });
+
+  document.getElementById('btnDelete').addEventListener('click', (ev) => {
+    ev.preventDefault();
+    //id
+    let key = document.whiskeyForm.getAttribute('data-key');
     if (key) {
       let tx = makeTX('items', 'readwrite');
       tx.oncomplete = (ev) => {
@@ -127,7 +126,7 @@ const IDB = (function init() {
       let request = store.delete(key); //request a delete
 
       request.onsuccess = (ev) => {
-        console.log('successfully deleted id: '+id);
+        console.log('successfully deleted an object');
         //move on to the next request in the transaction or
         //commit the transaction
       };
@@ -135,27 +134,23 @@ const IDB = (function init() {
         console.log('error in request to delete');
       };
     }
-    }
   });
 
-  document.getElementById('btnAdd').addEventListener('click', (ev) => {
+  document.getElementById('add-item-form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     //one of the form buttons was clicked
 
-    let name = document.getElementById('name').value.trim();
-    let country = document.getElementById('country').value.trim();
-    let age = parseInt(document.getElementById('age').value);
-    let owned = document.getElementById('isOwned').checked;
-
+    let text = document.getElementById('add-item-text').value.trim();
+    const uuid = uid();
     let whiskey = {
-      id: uid(),
-      name,
-      country,
-      age,
-      owned,
-      lastEdit: Date.now(),
+      uuid: uuid,
+      text,
+      colour:0,
+      progress:0,
+      todo:0,
+      complete: 0,
     };
-
+    console.log(uuid);
     let tx = makeTX('items', 'readwrite');
     tx.oncomplete = (ev) => {
       //console.log(ev);
@@ -164,10 +159,10 @@ const IDB = (function init() {
     };
 
     let store = tx.objectStore('items');
-    let request = store.add(whiskey); //request an insert/add
+    let request = store.put(whiskey); //request an insert/add
 
     request.onsuccess = (ev) => {
-      console.log('successfully added an object');
+      console.log('successfully added: '+uuid);
       //move on to the next request in the transaction or
       //commit the transaction
     };
@@ -176,7 +171,75 @@ const IDB = (function init() {
     };
   });
 
+  function buildList() {
+    //use getAll to get an array of objects from our store
+    let list = document.querySelector('#items');
+    list.innerHTML = `<li>Loading...</li>`;
+    let tx = makeTX('items', 'readonly');
+    tx.oncomplete = (ev) => {
+      //transaction for reading all objects is complete
+    };
+    let store = tx.objectStore('items');
+    //version 1 - getAll from Store
+    let items = store.getAll(); //key or keyrange optional
+    tx.oncomplete = (ev) => {
+    printTodos(items);
+      
+    };
+    //version 2 - getAll with keyrange and index
+    // let range = IDBKeyRange.lowerBound(14, true); //false 14 or higher... true 15 or higher
+    // let range = IDBKeyRange.bound(1, 10, false, false);
+    // let idx = store.index('ageIDX');
+    // let getReq = idx.getAll(range);
 
+    //version 1 AND 2 return an array
+    //option can pass in a key or a keyRange
+    // getReq.onsuccess = (ev) => {
+    //   //getAll was successful
+    //   let request = ev.target; //request === getReq === ev.target
+    //   //console.log({ request });
+    //   list.innerHTML = request.result
+    //     .map((whiskey) => {
+    //       return `<li data-key="${whiskey.id}"><span>${whiskey.name}</span> ${whiskey.age}</li>`;
+    //     })
+    //     .join('\n');
+    // };
+    // getReq.onerror = (err) => {
+    //   console.warn(err);
+    // };
+
+    //version 3 - using a cursor
+    // let index = store.index('nameIDX');
+    // let range = IDBKeyRange.bound('A', 'Z', false, false); //case sensitive A-Z a-z
+    // list.innerHTML = '';
+    // //direction - next, nextunique, prev, prevunique
+    // index.openCursor(range, 'next').onsuccess = (ev) => {
+    //   let cursor = ev.target.result;
+    //   if (cursor) {
+    //     console.log(
+    //       cursor.source.objectStore.name,
+    //       cursor.source.name,
+    //       cursor.direction,
+    //       cursor.key,
+    //       cursor.primaryKey
+    //     );
+    //     let whiskey = cursor.value;
+    //     list.innerHTML += `<li data-key="${whiskey.id}"><span>${whiskey.name}</span> ${whiskey.age}</li>`;
+    //     cursor.continue(); //call onsuccess
+    //   } else {
+    //     console.log('end of cursor');
+    //   }
+    // };
+  }
+
+  function makeTX(storeName, mode) {
+    let tx = db.transaction(storeName, mode);
+    tx.onerror = (err) => {
+      console.warn(err);
+    };
+    return tx;
+  }
+  
   document.getElementById('btnClear').addEventListener('click', clearForm);
 
   function clearForm(ev) {
