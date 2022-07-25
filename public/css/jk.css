@@ -32,7 +32,7 @@ li ul{
 header input, header span, nav{
     color: #fff;
 }
-header .row{
+header tr{
     display: flex;
 }
 .container
@@ -179,8 +179,15 @@ td.icon{
     width: 1em;
     text-align: right;
 }
+td.icons{
+    width: 13em;
+    text-align: right;
+}
+table{
+    margin: 0;
+}
 td{
-    padding: 0.6em;
+    padding: 1em;
 }
 #items{
     margin: 0;
@@ -209,14 +216,15 @@ td{
 #items .text-box{
     display: none;
 }
-#items .row{
+#items tr{
     padding: 1em 0;
     margin: 0;
     border-radius: 0.5em;
 }
-.fa{
+#items .fa{
     color: #fff;
     margin-top: 0.5em;
+    margin-right: 1em;
 }
 #items input{
     font-size: 1em;
@@ -234,10 +242,10 @@ td{
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#items .row:hover, #add-item-text:hover{
+#items tr:hover, #add-item-text:hover{
     background-color: hsla(100, 100%, 0%, 0.1);
 }
-#items .row:hover .fa, #items .row:hover .show {
+#items tr:hover .fa, #items tr:hover .show {
     opacity: 1;
 }
 #items .show:hover div{

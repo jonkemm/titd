@@ -129,8 +129,10 @@ async function monitor() {
 //  build 1 row of #items in the ui
 function buildUi( uuid, colour, message, progress, complete, todo  ){
     const d = new Date(todo);
-            todo == null ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
-let row = `
+    todo == null ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
+    let progressClass = '';
+    let completeClass = '';
+    let row = `
             <tr data-id="${uuid}" data-value="${message}" data-colour="${colour}">
                 <td class="icon">
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
@@ -147,7 +149,8 @@ row+=`
                 <td>
                     <input type="text" data-mode="text" id="input-${uuid}" value="${message}" class="text-box" />
                     <div class="text" data-mode="text" id="text-${uuid}">${message}</div>
-                </td>`;
+                </td>
+                <td>`;
             } else {
                 progress==0 ? progressClass='times-' : progressClass='check-';
                 complete==0 ? completeClass='' : completeClass='-circle-o';
@@ -156,19 +159,13 @@ row+=`
                     <input type="text" data-mode="text" id="input-${uuid}" value="${message}" class="text-box" />
                     <div class="text" data-mode="text" id="text-${uuid}">${message}</div>
                 </td>
-                <td>
+                <td class="icons">
                     <i class="fa fa-calendar-o" data-mode="calendar"></i>
                     <span class="todo-text">${todo}</span>
-                </td>
-                <td>
                     <i class="fa fa-${progressClass}circle-o" title="Underway?" data-mode="progress" data-value="${progress}"></i>
-                </td>
-                <td>
-                    <i class="fa fa-check${completeClass}" title="Complete" data-mode="complete" data-value="1"></i>
-                </td>`;
+                    <i class="fa fa-check${completeClass}" title="Complete" data-mode="complete" data-value="1"></i>`;
         }
 row+=`
-                <td class="icon">
                     <i class="fa fa-trash" data-mode="delete" aria-hidden="true"></i>
                 </td>
             </tr>`;
@@ -192,6 +189,8 @@ function printTodos(items) {
         const colour = items[i].colour;
         const progress = items[i].progress;
         const complete = items[i].complete;
+        let progressClass;
+        let completeClass;
         const todo = items[i].todo;
         // create row
         rowBuild += buildUi( uuid, colour, text, progress, complete, todo );
