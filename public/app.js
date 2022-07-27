@@ -54,7 +54,6 @@ const IDB = (function init() {
     let oldVersion = ev.oldVersion;
     let newVersion = ev.newVersion || db.version;
     console.log('DB updated from version', oldVersion, 'to', newVersion);
-
     // console.log('upgrade', db);
     if (db.objectStoreNames.contains('items')) {
       db.deleteObjectStore('items');
@@ -63,12 +62,31 @@ const IDB = (function init() {
     objectStore = db.createObjectStore('items', {
       keyPath: 'uuid',
     });    
-    var index = objectStore.createIndex("NameIndex", ["uuid", "text", "colour", "progress", "complete", "todo"]);
+    /*
 
-    objectStore.put({"uuid": 12345, "text": "testicles", colour: 0, progress: 0, complete: 0, todo: 0});
-    objectStore.put({"uuid": 12346, "text": "balls", colour: 0, progress: 0, complete: 0, todo: 0});
+    type
+    1 - titd
+    2 - todo
+    3 - note
+    4 - diary
+
+    progress
+    0
+    1 - underway
+    2 - completed
+
+    */
+    // var index = objectStore.createIndex("NameIndex", ["uuid", "text", "colour", "progress", "complete", "type", "created", "updated"]);
     
+    objectStore.createIndex('uuidIDX', 'uuid', { unique: true });
+    objectStore.createIndex('typeIDX', 'type', { unique: false });
+    objectStore.createIndex('textIDX', 'text', { unique: false });
+    objectStore.createIndex('colourIDX', 'colour', { unique: false });
+    objectStore.createIndex('progressIDX', 'progress', { unique: false });
+    objectStore.createIndex('createdIDX', 'created', { unique: false });
+    objectStore.createIndex('updatedIDX', 'updated', { unique: false });
 
+    objectStore.put({"uuid": "L612FHGL-024POWA2IGVJ", "type": 0, "text": "testicles", "colour": 0, "progress": 0, "created":Date(), "updated":Date()});
   });
 
   document.getElementById('add-item-form').addEventListener('submit', (ev) => {
@@ -79,11 +97,12 @@ const IDB = (function init() {
     const uuid = uid();
     let whiskey = {
       uuid: uuid,
+      type:0,
       text,
       colour:0,
       progress:0,
-      todo:0,
-      complete: 0,
+      created:Date(),
+      updated:Date()
     };
     console.log(uuid);
     let tx = makeTX('items', 'readwrite');
@@ -106,23 +125,76 @@ const IDB = (function init() {
   });
 
   document.getElementById('items').addEventListener('click', (ev) => {
-  })
+    let request;
+    let tx = makeTX('items', 'readwrite');
+    const id = ev.target.parentElement.parentElement.dataset.id;
+    const text = ev.target.parentElement.parentElement.dataset.text;
+    const colour = ev.target.parentElement.parentElement.dataset.colour;
+    const progress = ev.target.parentElement.parentElement.dataset.progress;
+    const created = ev.target.parentElement.parentElement.dataset.created;
+    const todo = ev.target.parentElement.parentElement.dataset.todo;
+    if (ev.target.dataset.mode=='delete') {
+      console.log('delete id: '+id);
+      tx.oncomplete = (ev) => {
+        buildList();
+        // clearForm();
+      };
+      let store = tx.objectStore('items');
+      request = store.delete(id); //request a delete
+      request.onsuccess = (ev) => {
+        tx.commit();
+      };
+    }
+    else if (ev.target.dataset.mode=='complete') {
+      console.log('updated complete id: '+id);
+      tx.oncomplete = (ev) => {
+        buildList();
+        // clearForm();
+      };
+      const query = { "uuid":id, text, colour, complete:"1", created, progress, updated: Date(),todo };
+      console.log('query: '+ JSON.stringify(query));
+      let store = tx.objectStore('items');
+      request = store.put(query); //request a delete
+      request.onsuccess = (ev) => {
+        tx.commit();
+      };
+    }
+    else if (ev.target.dataset.mode=='progress') {
+      console.log('updated progress id: '+id+' value: '+progress);
+      tx.oncomplete = (ev) => {
+        buildList();
+        // clearForm();
+      };
+      const query = { uuid:id, text, colour, complete:"1", updated: Date.now() };
+      let store = tx.objectStore('items');
+      request = store.put(query); //request a delete
+      request.onsuccess = (ev) => {
+        tx.commit();
+      };
+    }
+  });
 
   function buildList() {
     //use getAll to get an array of objects from our store
     let list = document.querySelector('#items');
-    list.innerHTML = `<li>Loading...</li>`;
+    list.innerHTML = `<tr><td>Loading...</td></tr>`;
     let tx = makeTX('items', 'readonly');
     tx.oncomplete = (ev) => {
       //transaction for reading all objects is complete
     };
     let store = tx.objectStore('items');
     //version 1 - getAll from Store
-    let items = store.getAll(); //key or keyrange optional
+    
+    let idx = store.index('typeIDX');
+    let items = idx.getAll(0);
+
+
+    
+    // let ites = store.getAll(); //key or keyrange optional
     tx.oncomplete = (ev) => {
-    printTodos(items);
-      
+      printTodos(items);
     };
+    
     //version 2 - getAll with keyrange and index
     // let range = IDBKeyRange.lowerBound(14, true); //false 14 or higher... true 15 or higher
     // let range = IDBKeyRange.bound(1, 10, false, false);

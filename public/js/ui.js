@@ -127,13 +127,15 @@ async function monitor() {
 //   })
 
 //  build 1 row of #items in the ui
-function buildUi( uuid, colour, message, progress, complete, todo  ){
-    const d = new Date(todo);
-    todo == null ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
-    let progressClass = '';
-    let completeClass = '';
+function buildUi( uuid, colour, message, progress, complete, todo, created  ){
+    let d;
+    todo != 'null' ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
+    let progressClass;
+    let completeClass;
+    progress==0 ? progressClass='times-' : progressClass='check-';
+    complete==0 ? completeClass='' : completeClass='-circle-o';
     let row = `
-            <tr data-id="${uuid}" data-value="${message}" data-colour="${colour}">
+            <tr data-id="${uuid}" data-text="${message}" data-colour="${colour}" data-progress="${progress}" data-created="${created}" data-todo="${todo}">
                 <td class="icon">
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
                     <div class="colours">`
@@ -162,7 +164,7 @@ row+=`
                 <td class="icons">
                     <i class="fa fa-calendar-o" data-mode="calendar"></i>
                     <span class="todo-text">${todo}</span>
-                    <i class="fa fa-${progressClass}circle-o" title="Underway?" data-mode="progress" data-value="${progress}"></i>
+                    <i class="fa fa-${progressClass}circle-o" title="Underway?" data-mode="progress"></i>
                     <i class="fa fa-check${completeClass}" title="Complete" data-mode="complete" data-value="1"></i>`;
         }
 row+=`
@@ -189,11 +191,13 @@ function printTodos(items) {
         const colour = items[i].colour;
         const progress = items[i].progress;
         const complete = items[i].complete;
+        const created = items[i].created;
+        const updated = items[i].updated;
         let progressClass;
         let completeClass;
         const todo = items[i].todo;
         // create row
-        rowBuild += buildUi( uuid, colour, text, progress, complete, todo );
+        rowBuild += buildUi( uuid, colour, text, progress, complete, todo, created, updated);
         div.innerHTML = rowBuild;
         count++;
     }
