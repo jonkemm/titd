@@ -127,15 +127,12 @@ async function monitor() {
 //   })
 
 //  build 1 row of #items in the ui
-function buildUi( uuid, colour, message, progress, complete, todo, created  ){
+function buildUi( uuid, type, colour, text, progress, created  ){
     let d;
-    todo != 'null' ? todo='' : todo = d.getDay()+'/'+d.getMonth()+'/'+d.getFullYear().toString(). substr(-2);
     let progressClass;
-    let completeClass;
     progress==0 ? progressClass='times-' : progressClass='check-';
-    complete==0 ? completeClass='' : completeClass='-circle-o';
     let row = `
-            <tr data-id="${uuid}" data-text="${message}" data-colour="${colour}" data-progress="${progress}" data-created="${created}" data-todo="${todo}">
+            <tr data-id="${uuid}" data-text="${message}" data-colour="${colour}" data-progress="${progress}" data-created="${created}">
                 <td class="icon">
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
                     <div class="colours">`
@@ -149,23 +146,21 @@ row+=`
 if(window.localStorage.getItem('type')=='0'){
 row+=`
                 <td>
-                    <input type="text" data-mode="text" id="input-${uuid}" value="${message}" class="text-box" />
-                    <div class="text" data-mode="text" id="text-${uuid}">${message}</div>
+                    <input type="text" data-mode="text" id="input-${uuid}" value="${text}" class="text-box" />
+                    <div class="text" data-mode="text" id="text-${uuid}">${text}</div>
                 </td>
                 <td>`;
             } else {
                 progress==0 ? progressClass='times-' : progressClass='check-';
-                complete==0 ? completeClass='' : completeClass='-circle-o';
 row+=`
                 <td>
-                    <input type="text" data-mode="text" id="input-${uuid}" value="${message}" class="text-box" />
-                    <div class="text" data-mode="text" id="text-${uuid}">${message}</div>
+                    <input type="text" data-mode="text" id="input-${uuid}" value="${text}" class="text-box" />
+                    <div class="text" data-mode="text" id="text-${uuid}">${text}</div>
                 </td>
                 <td class="icons">
                     <i class="fa fa-calendar-o" data-mode="calendar"></i>
-                    <span class="todo-text">${todo}</span>
                     <i class="fa fa-${progressClass}circle-o" title="Underway?" data-mode="progress"></i>
-                    <i class="fa fa-check${completeClass}" title="Complete" data-mode="complete" data-value="1"></i>`;
+                    <i class="fa fa-check" title="Completed?" data-mode="complete"></i>`;
         }
 row+=`
                     <i class="fa fa-trash" data-mode="delete" aria-hidden="true"></i>
@@ -190,14 +185,12 @@ function printTodos(items) {
         const text = items[i].text;
         const colour = items[i].colour;
         const progress = items[i].progress;
-        const complete = items[i].complete;
         const created = items[i].created;
         const updated = items[i].updated;
         let progressClass;
-        let completeClass;
-        const todo = items[i].todo;
+        const type = items[i].type;
         // create row
-        rowBuild += buildUi( uuid, colour, text, progress, complete, todo, created, updated);
+        rowBuild += buildUi( uuid, type, colour, text, progress, created, updated);
         div.innerHTML = rowBuild;
         count++;
     }

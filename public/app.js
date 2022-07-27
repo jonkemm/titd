@@ -65,10 +65,10 @@ const IDB = (function init() {
     /*
 
     type
-    1 - titd
-    2 - todo
-    3 - note
-    4 - diary
+    0 - titd
+    1 - todo
+    2 - note
+    3 - diary
 
     progress
     0
@@ -95,7 +95,7 @@ const IDB = (function init() {
 
     let text = document.getElementById('add-item-text').value.trim();
     const uuid = uid();
-    let whiskey = {
+    let query = {
       uuid: uuid,
       type:0,
       text,
@@ -112,7 +112,7 @@ const IDB = (function init() {
     };
 
     let store = tx.objectStore('items');
-    let request = store.put(whiskey); //request an insert/add
+    let request = store.put(query); //request an insert/add
 
     request.onsuccess = (ev) => {
       console.log('successfully added: '+uuid);
@@ -173,8 +173,14 @@ const IDB = (function init() {
       };
     }
   });
+  document.getElementById('nav').addEventListener('click', (ev) => {
+    let type = ev.target.dataset.type;
+    typeof(type) == 'undefined'?type=0:buildList(type);
+    
+  });
 
-  function buildList() {
+  function buildList(type) {
+    typeof(type) == 'undefined'?type=0:type;
     //use getAll to get an array of objects from our store
     let list = document.querySelector('#items');
     list.innerHTML = `<tr><td>Loading...</td></tr>`;
@@ -186,11 +192,16 @@ const IDB = (function init() {
     //version 1 - getAll from Store
     
     let idx = store.index('typeIDX');
-    let items = idx.getAll(0);
-
-
-    
+    type = parseInt(type);
+    console.log('type: '+type); 
+    let items = idx.getAll(type);
     // let ites = store.getAll(); //key or keyrange optional
+  //   store.getAll({
+  //     filter: "keyObj > 5 && valueObj.someProperty !== 'someValue'",
+  //     storageTypes: ["indexedDB"],
+  //     complete: function(byStorageTypeResultDataObj, byStorageTypeErrorObj){}
+  // });
+    
     tx.oncomplete = (ev) => {
       printTodos(items);
     };
@@ -208,8 +219,8 @@ const IDB = (function init() {
     //   let request = ev.target; //request === getReq === ev.target
     //   //console.log({ request });
     //   list.innerHTML = request.result
-    //     .map((whiskey) => {
-    //       return `<li data-key="${whiskey.id}"><span>${whiskey.name}</span> ${whiskey.age}</li>`;
+    //     .map((query) => {
+    //       return `<li data-key="${query.id}"><span>${query.name}</span> ${query.age}</li>`;
     //     })
     //     .join('\n');
     // };
@@ -232,8 +243,8 @@ const IDB = (function init() {
     //       cursor.key,
     //       cursor.primaryKey
     //     );
-    //     let whiskey = cursor.value;
-    //     list.innerHTML += `<li data-key="${whiskey.id}"><span>${whiskey.name}</span> ${whiskey.age}</li>`;
+    //     let query = cursor.value;
+    //     list.innerHTML += `<li data-key="${query.id}"><span>${query.name}</span> ${query.age}</li>`;
     //     cursor.continue(); //call onsuccess
     //   } else {
     //     console.log('end of cursor');
