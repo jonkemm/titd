@@ -1,6 +1,6 @@
 import { uid } from './uid.js';
 import { state } from './data.js';
-import { printTodos } from './js/ui.js';
+import { printTodos, adjustHeaderText } from './js/ui.js';
 
 //https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase
 
@@ -86,18 +86,19 @@ const IDB = (function init() {
     objectStore.createIndex('createdIDX', 'created', { unique: false });
     objectStore.createIndex('updatedIDX', 'updated', { unique: false });
 
-    objectStore.put({"uuid": "L612FHGL-024POWA2IGVJ", "type": 0, "text": "testicles", "colour": 0, "progress": 0, "created":Date(), "updated":Date()});
+    objectStore.put({"uuid": "L612FHGL-024POWA2IGVJ", type: 0, text: "testicles", colour: 0, progress: 0, "created":Date(), "updated":Date()});
   });
 
   document.getElementById('add-item-form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     //one of the form buttons was clicked
 
+    const type=parseInt(localStorage.getItem('type'));
     let text = document.getElementById('add-item-text').value.trim();
     const uuid = uid();
     let query = {
       uuid: uuid,
-      type:0,
+      type,
       text,
       colour:0,
       progress:0,
@@ -204,8 +205,9 @@ const IDB = (function init() {
   });
 
   document.getElementById('nav').addEventListener('click', (ev) => {
-    let type = ev.target.dataset.type;
+    let type = parseInt(ev.target.dataset.type);
     typeof(type) == 'undefined'?type=0:buildList(type);
+    adjustHeaderText(type);
     
   });
 
@@ -222,8 +224,8 @@ const IDB = (function init() {
     //version 1 - getAll from Store
     
     let idx = store.index('typeIDX');
-    type = parseInt(type);
-    console.log('type: '+type); 
+    // type = parseInt(type);
+    console.log('type idx: '+type); 
     let items = idx.getAll(type);
     // let ites = store.getAll(); //key or keyrange optional
   //   store.getAll({
@@ -291,6 +293,15 @@ const IDB = (function init() {
   }
   function clearForm(){
     document.getElementById('add-item-form').reset();
-    console.log('cleared form');
+    console.log('Cleared the form');
   }
+  document.addEventListener("scroll", function () {
+    const navbar = document.querySelector("#nav");
+    const navbarHeight = 100;
+    const distanceFromTop = Math.abs(
+      document.body.getBoundingClientRect().top
+    );
+    if (distanceFromTop >= navbarHeight) navbar.classList.add("fixed-top");
+    else navbar.classList.remove("fixed-top");
+  });
 })();

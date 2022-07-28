@@ -15,6 +15,7 @@ h1,h2,h3,nav{
 }
 h1{
     font-size: 1.4em;
+    margin: 0.3em auto;
 }
 h2{
     font-size: 1.2em;
@@ -38,14 +39,37 @@ header tr{
 .container
 {
     min-width: 15em;
+    margin: 0 auto;
 }
 
 /* nav >----------------------------------------------------------------------- */
 
+/* default state */
+#nav {
+    position: relative;
+    transition: all 0.3s ease-out;
+    margin: 0;
+    padding: 0;
+    font-size: 0.7em;
+}
+/* scrolling state */
+#nav.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 96%;
+    padding-bottom: 0.5em;
+}
+
+#nav.fixed-top ul{
+    margin: 0;
+}
+  
 nav ul {
     list-style: none;
     width: 100%;
     display: flex;
+}
+nav ul, nav ul li{
     padding: 0;
     margin: 0;
 }
@@ -55,6 +79,10 @@ nav ul li, #items .fa{
 nav li{
     width: 20%;
     text-align: center;
+}
+
+nav li a {
+    width: 100%;
 }
 nav li.icons{
     justify-content: space-around;
@@ -171,10 +199,6 @@ fieldset{
 
 /* items >---------------------------------------------------------------------------- */
 
-.table-responsive{
-    overflow-x:auto;
-    width: 100%;
-}
 td.icon{
     width: 1em;
     text-align: right;
@@ -196,8 +220,10 @@ td{
     border-radius: 0.5em;
     background-image: url('../img/bg-repeat.svg');
     background-size: contain;
+    overflow-x:auto;
+    width: 100%;
 }
-#items fa-calendar{
+#items .fa-calendar{
     width: 10em;
 }
 .no-records{
@@ -241,6 +267,7 @@ td{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
 }
 #items tr:hover, #add-item-text:hover{
     background-color: hsla(100, 100%, 0%, 0.1);
@@ -257,25 +284,25 @@ td{
 
 /* colour list ------------------------------------------------------------------------ */
 
-.titd-morning{
+.titd-morning, .titd-morning #nav{
     background-color: hsl(290, 84%, 65%);
 }
-.titd-afternoon{
+.titd-afternoon, .titd-afternoon #nav{
     background-color: hsl(118, 47%, 50%)
 }
-.titd-evening{
+.titd-evening, .titd-evening #nav{
     background-color: hsl(200, 85%, 25%);
 }
-.titd-night{
+.titd-night, .titd-night #nav{
     background-color: hsl(0, 100%, 10%);
 }
-.titd-todo{
+.titd-todo, .titd-todo #nav{
     background-color: hsl(231,39%,42%);
 }
-.titd-notes{
+.titd-notes, .titd-notes #nav{
     background-color: hsl(37,65%,60%);
 }
-.titd-dark{
+.titd-dark, .titd-dark #nav{
     background-color: hsl(231,39%,0%);
 }
 .colours{

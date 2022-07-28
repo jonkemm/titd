@@ -18,9 +18,6 @@ click on your mum
 
 
 
-
-let requestURL = '';
-
 // read();
 let items = window.items;
 monitor();
@@ -46,21 +43,22 @@ function adjustHeaderText(type) {
     // toggle button position
     const switchButton = document.getElementById('switchButton');
     const noRecords = document.getElementById('no-records');
-    localStorage.getItem('uuid')!=null ? document.getElementById('uuid').value = localStorage.getItem('uuid') : '';
-    localStorage.getItem('dark')!=null ? dark = localStorage.getItem('dark') : dark = '0';
-    localStorage.getItem('type')!=null ? type = localStorage.getItem('type') : type = '0';
+    localStorage.setItem('type',parseInt(type));
+    localStorage.getItem('dark')!=null ? dark = localStorage.getItem('dark') : dark = 0;
+    localStorage.getItem('type')!=null ? type = localStorage.getItem('type') : type = 0;
+    console.log('type jk: ' + type);
     // conditions
     if(time>='18' && time<'24'){timeMessage='evening';  typeCss='titd-evening';}
     if(time>='12' && time<'18'){timeMessage='afternoon'; typeCss='titd-afternoon'; }headerMessage = 'Smile Out Loud';
     if(time>='6' && time<'12'){timeMessage='morning'; typeCss='titd-morning'; headerMessage = '3 4 Me'; }
     // if type == todo
-    if(type=='1'){
+    if(type==1){
         headerMessage = 'To-do';
         timeMessage='todo';
         typeCss='titd-todo';
     }
     // if type == notes
-    if(type=='2'){
+    if(type==2){
         headerMessage = 'Note';
         timeMessage='notes';
         typeCss='titd-notes';
@@ -70,7 +68,7 @@ function adjustHeaderText(type) {
     // itemsBg.style.backgroundImage = "url('../img/bg-repeat.svg')";
     if(noRecords != null) noRecords.className = 'no-records';
     // if type == dark
-    if(dark=='1'){
+    if(dark==1){
         typeCss='titd-dark';
         document.getElementById('dark').className = 'fa fa-sun-o';
         itemsBg.style.backgroundImage = "url('img/bg-repeat-outline.svg')";
@@ -80,7 +78,7 @@ function adjustHeaderText(type) {
     // vars
     const placeholderText = document.getElementById('add-item-text');
     const message = document.getElementById('message');
-    let range = document.getElementById('range-input');
+    // let range = document.getElementById('range-input');
     const logo = document.getElementById('logo');    
     // localStorage.getItem('range')!=null ? range = localStorage.getItem('range') : range.value = '5'
 
@@ -92,9 +90,9 @@ function adjustHeaderText(type) {
     // change logo
     logo.className = timeMessage;
     // change bg
+    console.log(typeCss);
     document.body.className = typeCss;
-    // console.log('css set to: ' + typeCss);
-    // emojis
+    // emojis   
     const emojis = document.getElementById('emojis-container');
     emojis.style.display = 'none';
     message.style.display = 'block';
@@ -143,7 +141,7 @@ row+=`
 row+=`
                     </div>
                 </td>`;
-if(window.localStorage.getItem('type')=='0'){
+if(window.localStorage.getItem('type')!=='0'){
 row+=`
                 <td>
                     <input type="text" data-mode="text" id="input-${uuid}" value="${text}" class="text-box" />
