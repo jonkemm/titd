@@ -132,7 +132,7 @@ function buildUi( uuid, type, colour, text, progress, created  ){
     let progressClass;
     progress==0 ? progressClass='times-' : progressClass='check-';
     let row = `
-            <tr data-id="${uuid}" data-text="${message}" data-colour="${colour}" data-progress="${progress}" data-created="${created}">
+            <tr data-id="${uuid}" data-text="${text}" data-colour="${colour}" data-progress="${progress}" data-created="${created}">
                 <td class="icon">
                     <div class="rc-${colour} show" id="dot-${uuid}"></div>
                     <div class="colours">`
