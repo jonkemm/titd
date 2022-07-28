@@ -199,19 +199,30 @@ fieldset{
 
 /* items >---------------------------------------------------------------------------- */
 
+table{
+    margin: 0;
+    width: 100%;
+}
+td{
+    padding: 0.8em;
+}
+#items tr{
+    padding: 1em 0;
+    margin: 0;
+    border-radius: 0.5em;
+}
+#items .fa{
+    color: #fff;
+    margin-top: 0.5em;
+    margin-right: 0.2em;
+}
 td.icon{
     width: 1em;
     text-align: right;
 }
 td.icons{
-    width: 13em;
+    width: 5em;
     text-align: right;
-}
-table{
-    margin: 0;
-}
-td{
-    padding: 1em;
 }
 #items{
     margin: 0;
@@ -224,7 +235,7 @@ td{
     width: 100%;
 }
 #items .fa-calendar{
-    width: 10em;
+    width: 5em;
 }
 .no-records{
     min-height: 12em;
@@ -235,22 +246,8 @@ td{
     text-align: center;
     font-size: small;
 }
-.dark{
-    background-image: url('../img/no-records-outline.svg');
-
-}
 #items .text-box{
     display: none;
-}
-#items tr{
-    padding: 1em 0;
-    margin: 0;
-    border-radius: 0.5em;
-}
-#items .fa{
-    color: #fff;
-    margin-top: 0.5em;
-    margin-right: 1em;
 }
 #items input{
     font-size: 1em;
@@ -284,6 +281,10 @@ td{
 
 /* colour list ------------------------------------------------------------------------ */
 
+.dark{
+    background-image: url('../img/no-records-outline.svg');
+
+}
 .titd-morning, .titd-morning #nav{
     background-color: hsl(290, 84%, 65%);
 }

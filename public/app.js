@@ -89,6 +89,27 @@ const IDB = (function init() {
     objectStore.put({"uuid": "L612FHGL-024POWA2IGVJ", type: 0, text: "testicles", colour: 0, progress: 0, "created":Date(), "updated":Date()});
   });
 
+  document.getElementById('nav').addEventListener('click', (ev) => {
+    let type = ev.target.dataset.type;
+    console.log('type click nav: ' + typeof(type) );
+    console.log('type value click nav: ' + type );
+    let itemsBg = document.getElementById('items');
+    // if type == dark
+    if(type=='dark'){
+        const typeCss='titd-dark';
+        document.getElementById('dark').className = 'fa fa-sun-o';
+        itemsBg.style.backgroundImage = "url('img/bg-repeat-outline.svg')";
+        if(noRecords != null)noRecords.className = 'no-records dark';
+    }
+    if(typeof(type)== 'undefined'){
+      type=0;
+    } else{
+    console.log('clicked nav'); 
+      adjustHeaderText(type);
+      buildList(type);
+    }
+  });
+
   document.getElementById('add-item-form').addEventListener('submit', (ev) => {
     ev.preventDefault();
     //one of the form buttons was clicked
@@ -204,14 +225,8 @@ const IDB = (function init() {
     }
   });
 
-  document.getElementById('nav').addEventListener('click', (ev) => {
-    let type = parseInt(ev.target.dataset.type);
-    typeof(type) == 'undefined'?type=0:buildList(type);
-    adjustHeaderText(type);
-    
-  });
-
-  function buildList(type) {
+  function buildList() {
+    const type = parseInt(localStorage.getItem('type'));
     typeof(type) == 'undefined'?type=0:type;
     //use getAll to get an array of objects from our store
     let list = document.querySelector('#items');
@@ -221,67 +236,12 @@ const IDB = (function init() {
       //transaction for reading all objects is complete
     };
     let store = tx.objectStore('items');
-    //version 1 - getAll from Store
-    
     let idx = store.index('typeIDX');
-    // type = parseInt(type);
-    console.log('type idx: '+type); 
-    let items = idx.getAll(type);
-    // let ites = store.getAll(); //key or keyrange optional
-  //   store.getAll({
-  //     filter: "keyObj > 5 && valueObj.someProperty !== 'someValue'",
-  //     storageTypes: ["indexedDB"],
-  //     complete: function(byStorageTypeResultDataObj, byStorageTypeErrorObj){}
-  // });
-    
+    const items = idx.getAll(type);
+    console.log('type idx: '+type);
     tx.oncomplete = (ev) => {
       printTodos(items);
     };
-    
-    //version 2 - getAll with keyrange and index
-    // let range = IDBKeyRange.lowerBound(14, true); //false 14 or higher... true 15 or higher
-    // let range = IDBKeyRange.bound(1, 10, false, false);
-    // let idx = store.index('ageIDX');
-    // let getReq = idx.getAll(range);
-
-    //version 1 AND 2 return an array
-    //option can pass in a key or a keyRange
-    // getReq.onsuccess = (ev) => {
-    //   //getAll was successful
-    //   let request = ev.target; //request === getReq === ev.target
-    //   //console.log({ request });
-    //   list.innerHTML = request.result
-    //     .map((query) => {
-    //       return `<li data-key="${query.id}"><span>${query.name}</span> ${query.age}</li>`;
-    //     })
-    //     .join('\n');
-    // };
-    // getReq.onerror = (err) => {
-    //   console.warn(err);
-    // };
-
-    //version 3 - using a cursor
-    // let index = store.index('nameIDX');
-    // let range = IDBKeyRange.bound('A', 'Z', false, false); //case sensitive A-Z a-z
-    // list.innerHTML = '';
-    // //direction - next, nextunique, prev, prevunique
-    // index.openCursor(range, 'next').onsuccess = (ev) => {
-    //   let cursor = ev.target.result;
-    //   if (cursor) {
-    //     console.log(
-    //       cursor.source.objectStore.name,
-    //       cursor.source.name,
-    //       cursor.direction,
-    //       cursor.key,
-    //       cursor.primaryKey
-    //     );
-    //     let query = cursor.value;
-    //     list.innerHTML += `<li data-key="${query.id}"><span>${query.name}</span> ${query.age}</li>`;
-    //     cursor.continue(); //call onsuccess
-    //   } else {
-    //     console.log('end of cursor');
-    //   }
-    // };
   }
 
   function makeTX(storeName, mode) {
@@ -291,10 +251,12 @@ const IDB = (function init() {
     };
     return tx;
   }
+
   function clearForm(){
     document.getElementById('add-item-form').reset();
     console.log('Cleared the form');
   }
+
   document.addEventListener("scroll", function () {
     const navbar = document.querySelector("#nav");
     const navbarHeight = 100;
@@ -304,4 +266,5 @@ const IDB = (function init() {
     if (distanceFromTop >= navbarHeight) navbar.classList.add("fixed-top");
     else navbar.classList.remove("fixed-top");
   });
+
 })();

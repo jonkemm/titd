@@ -64,16 +64,8 @@ function adjustHeaderText(type) {
         typeCss='titd-notes';
     }
     document.getElementById('dark').className = 'fa fa-moon-o';
-    let itemsBg = document.getElementById('items');
     // itemsBg.style.backgroundImage = "url('../img/bg-repeat.svg')";
     if(noRecords != null) noRecords.className = 'no-records';
-    // if type == dark
-    if(dark==1){
-        typeCss='titd-dark';
-        document.getElementById('dark').className = 'fa fa-sun-o';
-        itemsBg.style.backgroundImage = "url('img/bg-repeat-outline.svg')";
-        if(noRecords != null)noRecords.className = 'no-records dark';
-    }
     // console.log('dark set to: ' + dark);
     // vars
     const placeholderText = document.getElementById('add-item-text');
@@ -141,13 +133,12 @@ row+=`
 row+=`
                     </div>
                 </td>`;
-if(window.localStorage.getItem('type')!=='0'){
+if(type!=1){
 row+=`
                 <td>
                     <input type="text" data-mode="text" id="input-${uuid}" value="${text}" class="text-box" />
                     <div class="text" data-mode="text" id="text-${uuid}">${text}</div>
-                </td>
-                <td>`;
+                </td>`;
             } else {
                 progress==0 ? progressClass='times-' : progressClass='check-';
 row+=`
@@ -158,9 +149,11 @@ row+=`
                 <td class="icons">
                     <i class="fa fa-calendar-o" data-mode="calendar"></i>
                     <i class="fa fa-${progressClass}circle-o" title="Underway?" data-mode="progress"></i>
-                    <i class="fa fa-check" title="Completed?" data-mode="complete"></i>`;
+                    <i class="fa fa-check" title="Completed?" data-mode="complete"></i>
+                </td>`;
         }
 row+=`
+                <td class="icon">
                     <i class="fa fa-trash" data-mode="delete" aria-hidden="true"></i>
                 </td>
             </tr>`;
