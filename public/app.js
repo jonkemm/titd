@@ -109,6 +109,7 @@ const IDB = (function init() {
     tx.oncomplete = (ev) => {
       //console.log(ev);
       buildList();
+      clearForm();
     };
 
     let store = tx.objectStore('items');
@@ -133,8 +134,9 @@ const IDB = (function init() {
     const progress = ev.target.parentElement.parentElement.dataset.progress;
     const created = ev.target.parentElement.parentElement.dataset.created;
     const todo = ev.target.parentElement.parentElement.dataset.todo;
+    const mode = ev.target.dataset.mode;
     if (ev.target.dataset.mode=='delete') {
-      console.log('delete id: '+id);
+      if(confirm(`Delete '${text}'?`)!==true)return;
       tx.oncomplete = (ev) => {
         buildList();
         // clearForm();
@@ -145,7 +147,7 @@ const IDB = (function init() {
         tx.commit();
       };
     }
-    else if (ev.target.dataset.mode=='complete') {
+    else if (mode =='complete') {
       console.log('updated complete id: '+id);
       tx.oncomplete = (ev) => {
         buildList();
@@ -159,7 +161,7 @@ const IDB = (function init() {
         tx.commit();
       };
     }
-    else if (ev.target.dataset.mode=='progress') {
+    else if (mode=='progress') {
       console.log('updated progress id: '+id+' value: '+progress);
       tx.oncomplete = (ev) => {
         buildList();
@@ -172,7 +174,35 @@ const IDB = (function init() {
         tx.commit();
       };
     }
+    else if( mode === 'text' ) {
+      // vars
+      const searchbox = document.getElementById('input-'+id);
+      // console.log('id: '+id);
+      // console.log('searchbox: '+searchbox);
+      // hide text, show input
+      ev.target.style.display="none";
+      // console.log('hidden the div');
+      searchbox.style.display="block";
+      // console.log('shown the textbox');
+      const code = searchbox.addEventListener('keydown', function(e) {
+          if (e.code === "Enter") {  
+              // vars
+              const searchbox = document.getElementById('input-'+id);
+              const searchDiv = document.getElementById('text-'+id);
+              const input = this.value;
+              // const requestURL = '/update/' ÷+ id + '/' + mode + '/' + input + '/' + type;
+              console.log('url to be sent (text): '); // console log
+              // hide text, show input
+              searchbox.style.display="none";
+              searchDiv.style.display = "block";
+
+          
+              // sending(requestURL);
+          }
+      });
+    }
   });
+
   document.getElementById('nav').addEventListener('click', (ev) => {
     let type = ev.target.dataset.type;
     typeof(type) == 'undefined'?type=0:buildList(type);
@@ -258,5 +288,9 @@ const IDB = (function init() {
       console.warn(err);
     };
     return tx;
+  }
+  function clearForm(){
+    document.getElementById('add-item-form').reset();
+    console.log('cleared form');
   }
 })();
