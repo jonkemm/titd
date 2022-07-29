@@ -1,13 +1,12 @@
 import { uid } from './uid.js';
-import { state } from './data.js';
-import { printTodos, adjustHeaderText } from './js/ui.js';
+import { printTodos, adjustHeaderText } from './ui.js';
 
 //https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase
 
 const IDB = (function init() {
   let db = null;
   let objectStore = null;
-  let DBOpenReq = indexedDB.open('TitD', 4);
+  let DBOpenReq = indexedDB.open('TitD', 1);
 
   DBOpenReq.addEventListener('error', (err) => {
     //Error occurred while trying to open DB
@@ -17,7 +16,7 @@ const IDB = (function init() {
   DBOpenReq.addEventListener('success', (ev) => {
     //DB has been opened... after upgradeneeded
     db = ev.target.result;
-    console.log('success opening DB');
+    // console.log('success opening DB');
     if (typeof state !== 'undefined') {
       let tx = makeTX('items', 'readwrite');
       tx.oncomplete = (ev) => {
@@ -91,15 +90,12 @@ const IDB = (function init() {
 
   document.getElementById('nav').addEventListener('click', (ev) => {
     let type = ev.target.dataset.type;
-    console.log('type click nav: ' + typeof(type) );
-    console.log('type value click nav: ' + type );
-    let itemsBg = document.getElementById('items');
+    console.log('type value nav: ' + type );
     // if type == dark
     if(type=='dark'){
         const typeCss='titd-dark';
         document.getElementById('dark').className = 'fa fa-sun-o';
-        itemsBg.style.backgroundImage = "url('img/bg-repeat-outline.svg')";
-        if(noRecords != null)noRecords.className = 'no-records dark';
+        document.body.className = 'titd-dark';
     }
     if(typeof(type)== 'undefined'){
       type=0;
@@ -226,8 +222,9 @@ const IDB = (function init() {
   });
 
   function buildList() {
-    const type = parseInt(localStorage.getItem('type'));
-    typeof(type) == 'undefined'?type=0:type;
+    let type;
+    // console.log(localStorage.getItem('type'));
+    localStorage.getItem('type') == 'NaN'?type=0:type=parseInt(localStorage.getItem('type'));
     //use getAll to get an array of objects from our store
     let list = document.querySelector('#items');
     list.innerHTML = `<tr><td>Loading...</td></tr>`;
@@ -238,7 +235,8 @@ const IDB = (function init() {
     let store = tx.objectStore('items');
     let idx = store.index('typeIDX');
     const items = idx.getAll(type);
-    console.log('type idx: '+type);
+    // console.log(items);
+    // console.log('type idx: '+type);
     tx.oncomplete = (ev) => {
       printTodos(items);
     };

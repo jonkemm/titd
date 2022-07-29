@@ -16,76 +16,53 @@
   <!-- <script defer src="./js/vanilla-calendar.js"></script> -->
   <!-- <script defer src="js/functions.js" type="module" defer ></script> -->
   <script defer src="js/ui.js" type="module" defer ></script>
-  <script defer src="./app.js" type="module" defer ></script>
+  <script defer src="js/app.js" type="module" defer ></script>
   <!-- <script defer src="js/db.js" type="module" defer ></script> -->
 </head>
 <body class="titd-dark">
     <div class="container">
         <div id="screen-top">
             <nav id="nav">
-                <a href="#">
-                    <h1>This is the day</h1>
-                </a>
-                <div>
-                    <ul>
-                        <!-- <li class="header-range">
-                            <form id="rating-form" action="/add_rating" method="get">
-                                <fieldset>
-                                    <legend>Add rating</legend>
-                                    <div id="range-container">
-                                        <div class="input-group" id="range">
-                                            <input 
-                                                type="range" 
-                                                class="form-input" 
-                                                id="range-input"
-                                                max="10"
-                                                data-value="range"
-                                                name="range-input"
-                                                value="${uuid}"
-                                            >
-                                        </div>
-                                        <div id="range-display"></div>
-                                        <input type="hidden" name="uuid" id="uuid" value="">
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </li> -->
-                        <li><a data-value="titd" data-type="0" title="Read your intentions / reflections">titd</a></li>
-                        <li><a data-value="find" title="Find ideas / days">Reflect</a></li>
-                        <li><a data-value="todos" data-type="1" title="Links to lovely things to try">To do</a></li>
-                        <li><a data-value="notes" data-type="2" title="Keep a diary">Notes</a></li>
-                        <li class="icons"><a title="Dark mode"><i class="fa fa-moon-o" data-type="dark" id="dark" aria-hidden="true"></i></a>
+                <div class="nav-top">
+                    <a href="#">This is the day</a>
+                    <div class="icons">
+                        <i class="fa fa-moon-o" data-type="dark" id="dark" aria-hidden="true"></i>
                         <a data-value="share" title="Share"><i class="fa fa-whatsapp" data-value="share" aria-hidden="true"></i><input id="share-item-text" type="hidden" /></a>
-                        <a title="Log out"><i class="fa fa-sign-out logout" aria-hidden="true"></i></a></li>
-                     </ul>
+                        <a title="Log out"><i class="fa fa-sign-out logout" aria-hidden="true"></i></a>
+                    </div>
                 </div>
-  
-              </nav>
-              <header>
-                      <div class="row">
-                        <form id="add-item-form" class="add">
-                            <fieldset>
-                                <legend>Add item</legend>
-                                <div class="input-group mb-3" id="add-item">
-                                    <input id="add-item-text"  name="message" required class="form-control" placeholder="Add a note, press enter to save it" />
-                                    <div id="logo" class="afternoon">
-                                        <div id="message" class="afternoon" data-value="show-emojis"></div>
-                                    </div>
-                                    <input type="hidden" name="type" id="add-item-type" value="0" />
-                                    <input type="hidden" name="colour" id="add-item-colour" value="0" />
-                                    <div id="emojis-container"></div>
-                                </div>
-                            </fieldset>
-                        </form>
-                      </div>
-              </header>
-      </div>
+                <ul>
+                    <li><a data-value="titd" data-type="0" title="Read your intentions / reflections">titd</a></li>
+                    <li><a data-value="find" title="Find ideas / days">Reflect</a></li>
+                    <li><a data-value="todos" data-type="1" title="Links to lovely things to try">To do</a></li>
+                    <li><a data-value="notes" data-type="2" title="Keep a diary">Notes</a></li>
+                </ul>
+            </nav>
+            <header>
+            <div class="row">
+                <form id="add-item-form" class="add">
+                    <fieldst>
+                        <legend>Add item</legend>
+                        <div class="input-group mb-3" id="add-item">
+                            <input id="add-item-text"  name="message" required class="form-control" placeholder="Add a note, press enter to save it" autocomplete="off" />
+                            <div id="logo" class="afternoon">
+                                <div id="message" class="afternoon" data-value="show-emojis"></div>
+                            </div>
+                            <input type="hidden" name="type" id="add-item-type" value="0" />
+                            <input type="hidden" name="colour" id="add-item-colour" value="0" />
+                            <div id="emojis-container"></div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            </header>
+        </div>
       <main>
           <!-- <div id="calendar-container">
                   <div class="switch-container"> am <div class="switch"> <input type="checkbox" id="switchButton" /><label for="switchButton">Toggle</label> </div> pm </div>
                   <div class="vanilla-calendar" id="vanilla-calendar-01"></div>
           </div> -->
-          <table class="table-responsive">
+          <table>
               <tbody id="items"></tbody>
           </table>
       </main>

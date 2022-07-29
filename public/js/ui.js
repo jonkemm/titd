@@ -46,7 +46,7 @@ function adjustHeaderText(type) {
     localStorage.setItem('type',parseInt(type));
     localStorage.getItem('dark')!=null ? dark = localStorage.getItem('dark') : dark = 0;
     localStorage.getItem('type')!=null ? type = localStorage.getItem('type') : type = 0;
-    console.log('type jk: ' + type);
+    // console.log('type jk: ' + type);
     // conditions
     if(time>='18' && time<'24'){timeMessage='evening';  typeCss='titd-evening';}
     if(time>='12' && time<'18'){timeMessage='afternoon'; typeCss='titd-afternoon'; }headerMessage = 'Smile Out Loud';
@@ -82,7 +82,7 @@ function adjustHeaderText(type) {
     // change logo
     logo.className = timeMessage;
     // change bg
-    console.log(typeCss);
+    // console.log(typeCss);
     document.body.className = typeCss;
     // emojis   
     const emojis = document.getElementById('emojis-container');
@@ -167,7 +167,7 @@ function printTodos(items) {
     // return;
     let rowBuild = '';
     let count=0;
-    console.log(items.result);
+    // console.table(items.result);
     items = items.result;
     for (let i in items ) {
         // items[i] = items[i].result;
