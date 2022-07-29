@@ -33,20 +33,15 @@ function waitFor(time) {
 
 // adjust header text
 function adjustHeaderText(type) {
-    // check local storage
-    let dark
-    let headerMessage
-    let timeMessage='night';
-    let typeCss='titd-night';
+    // vars
+    let dark, headerMessage, timeMessage, typeCss;
     // get time info
     let time = new Date().getHours();
-    // toggle button position
-    const switchButton = document.getElementById('switchButton');
+    // 
     const noRecords = document.getElementById('no-records');
     localStorage.setItem('type',parseInt(type));
     localStorage.getItem('dark')!=null ? dark = localStorage.getItem('dark') : dark = 0;
     localStorage.getItem('type')!=null ? type = localStorage.getItem('type') : type = 0;
-    // console.log('type jk: ' + type);
     // conditions
     if(time>='18' && time<'24'){timeMessage='evening';  typeCss='titd-evening';}
     if(time>='12' && time<'18'){timeMessage='afternoon'; typeCss='titd-afternoon'; }headerMessage = 'Smile Out Loud';
@@ -63,7 +58,7 @@ function adjustHeaderText(type) {
         timeMessage='notes';
         typeCss='titd-notes';
     }
-    document.getElementById('dark').className = 'fa fa-moon-o';
+    // document.getElementById('dark').className = 'fa fa-moon-o';
     // itemsBg.style.backgroundImage = "url('../img/bg-repeat.svg')";
     if(noRecords != null) noRecords.className = 'no-records';
     // console.log('dark set to: ' + dark);

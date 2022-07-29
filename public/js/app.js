@@ -85,24 +85,36 @@ const IDB = (function init() {
     objectStore.createIndex('createdIDX', 'created', { unique: false });
     objectStore.createIndex('updatedIDX', 'updated', { unique: false });
 
-    objectStore.put({"uuid": "L612FHGL-024POWA2IGVJ", type: 0, text: "testicles", colour: 0, progress: 0, "created":Date(), "updated":Date()});
+    objectStore.put({"uuid": "L612FHGL-024POWA2IGVJ", type: 0, text: "I will have a lovely day", colour: 0, progress: 0, "created":Date(), "updated":Date()});
   });
 
   document.getElementById('nav').addEventListener('click', (ev) => {
-    let type = ev.target.dataset.type;
-    console.log('type value nav: ' + type );
+    let dark = ev.target.dataset.dark;
+    let typeCss;
+    let type;
+    ev.target.dataset.type == ''? type = localStorage.getItem('type') : type = ev.target.dataset.type;
     // if type == dark
-    if(type=='dark'){
-        const typeCss='titd-dark';
+    if(dark=='dark'){
+      if(document.body.classList=='titd-dark'){
+        // typeCss='titd-night' ;
+        document.getElementById('dark').className = 'fa fa-moon-o';
+        // console.log('clicked nav');
+        type = localStorage.getItem('type');
+        adjustHeaderText(type);
+        console.log('dark, to light'+type);
+      } else {
         document.getElementById('dark').className = 'fa fa-sun-o';
         document.body.className = 'titd-dark';
-    }
-    if(typeof(type)== 'undefined'){
-      type=0;
+        console.log('css value nav: titd-dark');
+        console.log('dark, to dark');
+      }
     } else{
-    console.log('clicked nav'); 
-      adjustHeaderText(type);
+      console.log(ev.target.dataset.type);
+      console.log('type value nav: ' + type );
+      // type = localStorage.getItem('type');
       buildList(type);
+      adjustHeaderText(type);
+      
     }
   });
 
