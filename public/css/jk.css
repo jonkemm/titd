@@ -65,6 +65,7 @@ header tr{
 }
 .nav-top{
     display: flex;
+    margin-bottom: 2em;
 }
 nav .icons{
     margin-left: auto;
@@ -175,9 +176,6 @@ nav li a {
     font-size: 1em;
     width: 100%;
     border: 0;
-}
-header{
-    margin-top: 2em;
 }
 header .fa{
     font-size: 2em;

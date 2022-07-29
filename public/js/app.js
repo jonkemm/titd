@@ -96,22 +96,15 @@ const IDB = (function init() {
     // if type == dark
     if(dark=='dark'){
       if(document.body.classList=='titd-dark'){
-        // typeCss='titd-night' ;
         document.getElementById('dark').className = 'fa fa-moon-o';
-        // console.log('clicked nav');
         type = localStorage.getItem('type');
         adjustHeaderText(type);
-        console.log('dark, to light'+type);
       } else {
         document.getElementById('dark').className = 'fa fa-sun-o';
         document.body.className = 'titd-dark';
-        console.log('css value nav: titd-dark');
-        console.log('dark, to dark');
       }
     } else{
       console.log(ev.target.dataset.type);
-      console.log('type value nav: ' + type );
-      // type = localStorage.getItem('type');
       buildList(type);
       adjustHeaderText(type);
       
@@ -120,8 +113,6 @@ const IDB = (function init() {
 
   document.getElementById('add-item-form').addEventListener('submit', (ev) => {
     ev.preventDefault();
-    //one of the form buttons was clicked
-
     const type=parseInt(localStorage.getItem('type'));
     let text = document.getElementById('add-item-text').value.trim();
     const uuid = uid();
@@ -137,7 +128,6 @@ const IDB = (function init() {
     console.log(uuid);
     let tx = makeTX('items', 'readwrite');
     tx.oncomplete = (ev) => {
-      //console.log(ev);
       buildList();
       clearForm();
     };
@@ -147,8 +137,6 @@ const IDB = (function init() {
 
     request.onsuccess = (ev) => {
       console.log('successfully added: '+uuid);
-      //move on to the next request in the transaction or
-      //commit the transaction
     };
     request.onerror = (err) => {
       console.log('error in request to add');
